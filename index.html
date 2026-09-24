@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>[ABU.DEV] — Next-Gen Web Engineering</title>
+
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        script-src 'self' 'unsafe-inline';
+        img-src 'self' data: https:;
+        connect-src 'self' https://formsubmit.co;
+        frame-src 'self' https:;
+        form-action 'self' https://formsubmit.co;
+    ">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&family=Poppins:wght@400;500;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="invertedCursor" class="invertedCursor"></div>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <main id="mainViewport">
+        <section class="heroSection">
+            
+            <header class="embeddedHeader">
+                <div class="siteLogo">[ABU.DEV]</div>
+                
+                <nav class="heroNav" id="heroNav">
+                    <button class="closeNavBtn" id="closeNavBtn" aria-label="Close Menu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <a href="#templatesSection" data-odometer>Templates</a>
+                    <a href="#servicesSection" data-odometer>Tiers</a>
+                    <a href="#aboutSection" data-odometer>About</a>
+                    <a href="#contactSection" data-odometer>Contact</a>
+
+                    <button class="btnPill cursorToggleBtn mobileOnly" aria-label="Toggle Inverted Cursor">
+                        <span class="cursorBtnText">Cursor FX: ON</span>
+                    </button>
+                </nav>
+
+                <div class="navActions">
+                    <button id="themeToggleBtn" class="btnPill" aria-label="Toggle Theme">
+                        <span class="themeIcon">☀</span>
+                    </button>
+                    
+                    <button class="btnPill cursorToggleBtn desktopOnly" aria-label="Toggle Inverted Cursor">
+                        <span class="cursorBtnText">Cursor FX: ON</span>
+                    </button>
+                    
+                    <button class="hamburgerBtn" id="hamburgerBtn" aria-label="Toggle Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="heroTitleContainer">
+                <span class="scatteredTag tagTopLeft badgeGlass squishBadge" data-odometer-repeat>DESIGN</span>
+                <span class="scatteredTag tagTopRight badgeGlass squishBadge" data-odometer-repeat>DEPLOY</span>
+
+                <div class="heroTitleGrid">
+                    <h1 class="titleWeb">WEB</h1>
+                    <h1 class="titleDev">DEV</h1>
+                    <span class="scatteredTag tagBetweenWebDev badgeGlass squishBadge" data-odometer-repeat>BUILD</span>
+                </div>
+
+                <div class="heroCtaWrapper">
+                    <div class="btnWrapper">
+                        <span class="line horizontal top"></span>
+                        <span class="line vertical right"></span>
+                        <span class="line horizontal bottom"></span>
+                        <span class="line vertical left"></span>
+                        <span class="dot topLeft"></span>
+                        <span class="dot topRight"></span>
+                        <span class="dot bottomRight"></span>
+                        <span class="dot bottomLeft"></span>
+                        <a href="#contactSection" class="btn btnHero">Start Designing</a>
+                    </div>
+                </div>
+
+                <span class="orbitPill pillPerf badgeGlass squishBadge" data-odometer-repeat>PERFORMANCE</span>
+                <span class="orbitPill pillSec badgeGlass squishBadge" data-odometer-repeat>SECURITY</span>
+                <span class="orbitPill pill3d badgeGlass squishBadge" data-odometer-repeat>SEO</span>
+                <span class="orbitPill pillIndexing badgeGlass squishBadge" data-odometer-repeat>INDEXING</span>
+            </div>
+
+            <div class="mobileBadgeContainer">
+                <div class="mobileBadgeRow">
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>DESIGN</span>
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>DEPLOY</span>
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>BUILD</span>
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>PERFORMANCE</span>
+                </div>
+                <div class="mobileHeroTitleWrapper">
+                    <h1 class="heroTitleMobile">WEB DEV</h1>
+                    <div class="heroCtaWrapper">
+                        <div class="btnWrapper">
+                            <span class="line horizontal top"></span>
+                            <span class="line vertical right"></span>
+                            <span class="line horizontal bottom"></span>
+                            <span class="line vertical left"></span>
+                            <span class="dot topLeft"></span>
+                            <span class="dot topRight"></span>
+                            <span class="dot bottomRight"></span>
+                            <span class="dot bottomLeft"></span>
+                            <a href="#contactSection" class="btn btnHero">Start Designing</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mobileBadgeRow">
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>SECURITY</span>
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>SEO</span>
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>INDEXING</span>
+                    <span class="badgeGlass squishBadge" data-odometer-repeat>ANALYTICS</span>
+                </div>
+            </div>
+
+            <div class="heroFooterBar">
+                <p class="tagLine">SPEED | SECURITY | PERFORMANCE | DESIGN</p>
+            </div>
+        </section>
+
+        <section id="templatesSection" class="contentSection">
+            <h2 class="sectionTitle" data-odometer-repeat>TEMPLATES</h2>
+            <p class="sectionSub">Select a pre-made design to view its live deployment inside the interactive frame.</p>
+
+            <div class="templateViewerGrid">
+                <div class="templateTabs">
+                    <button class="templateTabBtn isActive" data-url="https://template1-demo.netlify.app/" data-odometer>Template 1</button>
+                    <button class="templateTabBtn" data-url="https://template2-demo.netlify.app/" data-odometer>Template 2</button>
+                    <button class="templateTabBtn" data-url="https://template3-demo.netlify.app/" data-odometer>Template 3</button>
+                    <button class="templateTabBtn" data-url="https://template4-demo.netlify.app/" data-odometer>Template 4</button>
+                    <button class="templateTabBtn" data-url="https://template5-demo.netlify.app/" data-odometer>Template 5</button>
+                    <button class="templateTabBtn" data-url="https://template6-demo.netlify.app/" data-odometer>Template 6</button>
+                    <button class="templateTabBtn customOption" data-url="custom" data-odometer>Custom Design</button>
+                </div>
+
+                <div class="previewContainer glassCard">
+                    <div class="browserHeader">
+                        <div class="windowControls">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="previewUrl" id="previewUrlBar">https://saas-dashboard-demo.netlify.app</span>
+                        <a href="https://saas-dashboard-demo.netlify.app" id="externalDemoBtn" target="_blank" rel="noopener noreferrer" class="btnExternalLaunch">Open In New Tab ↗</a>
+                    </div>
+                    <div class="iframeWrapper" id="iframeWrapper">
+                        <iframe id="templateFrame" title="Template Live Preview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+
+                        <div id="mobileLaunchNotice" class="mobileNotice">
+                            <p id="mobileNoticeText">Previewing Template, switch to Laptop or PC for better view.</p>
+                            <a href="#" id="mobileExternalBtn" target="_blank" rel="noopener noreferrer" class="btnPill btnDark">Open Full Demo ↗</a>
+                        </div>
+                    
+                        <div id="customBanner" class="customNotice isCardHidden">
+                            <h3>Custom Site Design</h3>
+                            <p>Have a unique vision? Contact Us to get started!</p>
+                            <a href="#contactSection" class="btnPill btnDark" data-odometer>Discuss Custom Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="servicesSection" class="contentSection">
+            <h2 class="sectionTitle" data-odometer-repeat>TIERS AND PRICING</h2>
+            <div class="pricingGrid">
+                <div class="priceCard glassCard tierCard">
+                    <h3>PRE-MADE TEMPLATE</h3>
+                    <div class="priceValue">Rs 6999</div>
+                    <ul class="featureList">
+                        <li>Choice of Pre-built Template</li>
+                        <li>Fast Deployment</li>
+                        <li>Custom Text & Assets Integration</li>
+                        <li>Responsive Mobile Design</li>
+                    </ul>
+                    <a href="#contactSection" class="btnPill" data-odometer>Select Template</a>
+                </div>
+                <div class="priceCard glassCard tierCard featuredCard">
+                    <div class="popularBadge">POPULAR</div>
+                    <h3>HYBRID BUILD</h3>
+                    <div class="priceValue">Rs 9999</div>
+                    <ul class="featureList">
+                        <li>Template Base + Custom Module Addons</li>
+                        <li>Template Theme, customized colors</li>
+                        <li>Performance & Security Hardening</li>
+                        <li>SEO + Search Indexing</li>
+                    </ul>
+                    <a href="#contactSection" class="btnPill btnDark" data-odometer>Select Hybrid</a>
+                </div>
+                <div class="priceCard glassCard tierCard">
+                    <h3>FULL CUSTOM SITE</h3>
+                    <div class="priceValue">Rs 14999</div>
+                    <ul class="featureList">
+                        <li>100% Bespoke Architecture & UI</li>
+                        <li>Simple Backend API Integration</li>
+                        <li>Headless CMS Integration</li>
+                        <li>SEO + Search Indexing</li>
+                    </ul>
+                    <a href="#contactSection" class="btnPill" data-odometer>Select Custom</a>
+                </div>
+                <div class="priceCard glassCard tierCard">
+                    <h3>E-Commerce</h3>
+                    <div class="priceValue">Tailored Pricing</div>
+                    <ul class="featureList">
+                        <li>100% Bespoke Architecture & UI</li>
+                        <li>Advanced Backend API Integration</li>
+                        <li>Headless CMS Integration, Rate Limiting, Security Hardening</li>
+                        <li>SEO + Search Indexing</li>
+                    </ul>
+                    <a href="#contactSection" class="btnPill" data-odometer>Select E-Commerce</a>
+                </div>                
+            </div>
+        </section>
+
+        <section id="aboutSection" class="contentSection">
+            <h2 class="sectionTitle" data-odometer-repeat>ABOUT ME</h2>
+            <div class="aboutGrid glassCard aboutCard">
+                <div class="aboutText">
+                    <p>Hello! I am Abushama, a Web Developer. I have been making websites, apps and games for fun since I was 15. I kept going and fueled all that passion into 4+ years of firsthand experience, still pushing my capabilities further into making something meaningful.</p>
+                    <p>I help brands turn their ideas into production-ready sites with my expertise in web dev, and UI/UX. Every project of mine, be it personal or business, is built with four core pillars: speed, security, performance and design.</p>
+                    <p>My goal is simple, to deliver modern, scalable and clean web architecture engineered to meet today's highest standards.</p>
+                </div>
+                <div class="aboutStats">
+                    <img src="images/glorp.jpg" class="pfp" alt="Profile">
+                    <div class="statItem">abu.dev</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contactSection" class="contentSection">
+            <div class="sectionTitleHeader">
+                <h2 class="sectionTitle" data-odometer-repeat>START A PROJECT</h2>
+                
+                <ul class="wrapper">
+                    <li class="icon instagram">
+                        <span class="tooltip">Instagram ↗</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
+                        </svg>
+                    </li>
+                    <li class="icon whatsapp">
+                        <span class="tooltip">WhatsApp ↗</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.57 6.57 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007s-.346.05-.527.247c-.182.198-.691.677-.691 1.654s.707 1.916.806 2.05c.1.133 1.392 2.125 3.372 2.98.47.203.838.324 1.125.415.473.15.903.129 1.243.078.38-.058 1.17-.478 1.336-.94.166-.462.166-.857.117-.94-.05-.083-.182-.133-.38-.232z"/>
+                        </svg>
+                    </li>
+                    <li class="icon gmail">
+                        <span class="tooltip">Gmail ↗</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-.739-.756zm8.808-4.133l-5.803 3.558L16 11.801V4.697z"/>
+                        </svg>
+                    </li>
+                </ul>
+            </div>
+            <div class="contactWrapper glassCard">
+                <div id="formAlertBox" class="isCardHidden"></div>
+                <form id="secureContactForm" class="contactForm" novalidate>
+                    
+                    <div class="formScopeGroup">
+                        <label class="groupLabel">What type of service do you need?</label>
+                        <div class="chipGroup">
+                            <label class="chipCheck"><input type="checkbox" name="serviceType" value="Pre-made Template"> <span>Pre-made Template</span></label>
+                            <label class="chipCheck"><input type="checkbox" name="serviceType" value="Hybrid Build"> <span>Hybrid Build</span></label>
+                            <label class="chipCheck"><input type="checkbox" name="serviceType" value="Full Custom Site"> <span>Full Custom Site</span></label>
+                            <label class="chipCheck"><input type="checkbox" name="serviceType" value="Security Audit / Fix"> <span>Security Audit</span></label>
+                        </div>
+                    </div>
+
+                    <div class="formRowSplit">
+                        <div class="formGroup">
+                            <label>Project Budget</label>
+                            <div class="customSelectWrapper">
+                                <div class="customSelect" id="budgetSelect">
+                                    <div class="customSelectTrigger">
+                                        <span class="placeholder">Select Budget Range</span>
+                                        <div class="arrow"></div>
+                                    </div>
+                                    <div class="customOptions">
+                                        <span class="customOption" data-value="$500 - $1,000">$500 - $1,000</span>
+                                        <span class="customOption" data-value="$1,000 - $3,000">$1,000 - $3,000</span>
+                                        <span class="customOption" data-value="$3,000 - $5,000">$3,000 - $5,000</span>
+                                        <span class="customOption" data-value="$5,000+">$5,000+</span>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="projectBudget" name="projectBudget">
+                            </div>
+                        </div>
+                        <div class="formGroup">
+                            <label>Expected Timeline</label>
+                            <div class="customSelectWrapper">
+                                <div class="customSelect" id="timelineSelect">
+                                    <div class="customSelectTrigger">
+                                        <span class="placeholder">Select Timeline</span>
+                                        <div class="arrow"></div>
+                                    </div>
+                                    <div class="customOptions">
+                                        <span class="customOption" data-value="Urgent (1-2 Days)">Urgent (1-2 Days)</span>
+                                        <span class="customOption" data-value="1-2 Weeks">1-2 Weeks</span>
+                                        <span class="customOption" data-value="1 Month">1 Month</span>
+                                        <span class="customOption" data-value="Flexible">Flexible</span>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="projectTimeline" name="projectTimeline">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="formRowSplit">
+                        <div class="formGroup">
+                            <label for="userName">Your Name *</label>
+                            <input type="text" id="userName" name="userName" maxlength="50" required placeholder="Enter Name">
+                        </div>
+                        <div class="formGroup">
+                            <label for="userEmail">Your Email *</label>
+                            <input type="email" id="userEmail" name="userEmail" maxlength="100" required placeholder="Enter Email">
+                        </div>
+                    </div>
+
+                    <div class="formGroup">
+                        <label for="userMessage">Project Details & Objectives *</label>
+                        <textarea id="userMessage" name="userMessage" rows="5" required placeholder="Describe your project, target audience, and specific features needed..."></textarea>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btnPill btnDark" data-odometer>Send Inquiry</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <div class="backToTopContainer">
+      <button class="button" id="backToTopBtn" aria-label="Back to top">
+        <svg class="svgIcon" viewBox="0 0 384 512">
+          <path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
