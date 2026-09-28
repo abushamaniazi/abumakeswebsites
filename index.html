@@ -2,9 +2,19 @@
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0c0f" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#e6e6e0" media="(prefers-color-scheme: light)">
+    <meta name="color-scheme" content="dark light">
     <title>[ABU.DEV] — Next-Gen Web Engineering</title>
+    <meta name="description" content="High-performance custom web development, bespoke UI/UX design, SEO optimization, and site security audits by Abushama (ABU.DEV).">
+    <meta name="keywords" content="web development, web developer, custom websites, ecommerce developer, website audit, SEO optimization, frontend developer, ABU.DEV">
+    <meta name="author" content="Abushama (ABU.DEV)">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://abumakeswebsites.netlify.app/">
 
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
@@ -18,12 +28,26 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&family=Poppins:wght@400;500;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://abumakeswebsites.netlify.app/">
+    <meta property="og:title" content="[ABU.DEV] — Next-Gen Web Engineering">
+    <meta property="og:description" content="Transforming ideas into high-performance, secure, and modern web applications. Explore pre-made templates, custom builds, site audits, and interactive project estimations.">
+    <meta property="og:image" content="https://abumakeswebsites.netlify.app/images/glorp.jpg">
+    <meta property="og:site_name" content="ABU.DEV">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://abumakeswebsites.netlify.app/">
+    <meta name="twitter:title" content="[ABU.DEV] — Next-Gen Web Engineering">
+    <meta name="twitter:description" content="Transforming ideas into high-performance, secure, and modern web applications.">
+    <meta name="twitter:image" content="https://abumakeswebsites.netlify.app/images/glorp.jpg">
 </head>
 <body>
-    <div id="invertedCursor" class="invertedCursor"></div>
+    <div id="invertedCursor" class="invertedCursor" aria-hidden="true"></div>
 
     <canvas id="particleCanvas"></canvas>
 
@@ -31,7 +55,10 @@
         <section class="heroSection">
             
             <header class="embeddedHeader">
-                <div class="siteLogo">[ABU.DEV]</div>
+                <div class="siteLogo">
+                    <img src="images/glorp.png" alt="ABU.DEV logo" class="siteLogoImg" width="32" height="32" decoding="async">
+                    <span class="siteLogoText">[ABU.DEV]</span>
+                </div>
                 
                 <nav class="heroNav" id="heroNav">
                     <button class="closeNavBtn" id="closeNavBtn" aria-label="Close Menu">
@@ -40,10 +67,10 @@
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
                     </button>
-                    <a href="#templatesSection" data-odometer>Templates</a>
-                    <a href="#servicesSection" data-odometer>Tiers</a>
-                    <a href="#aboutSection" data-odometer>About</a>
-                    <a href="#contactSection" data-odometer>Contact</a>
+                    <a href="#templatesSection" class="heroBtn">Templates</a>
+                    <a href="#servicesSection" class="heroBtn">Tiers</a>
+                    <a href="#aboutSection" class="heroBtn">About</a>
+                    <a href="#contactSection" class="heroBtn">Contact</a>
 
                     <button class="btnPill cursorToggleBtn mobileOnly" aria-label="Toggle Inverted Cursor">
                         <span class="cursorBtnText">Cursor FX: ON</span>
@@ -51,6 +78,18 @@
                 </nav>
 
                 <div class="navActions">
+                    <div class="customSelect currencySelect" id="currencySelect">
+                        <div class="customSelectTrigger btnPill currencyTrigger">
+                            <span class="currencyLabel">₹ INR</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="customOptions currencyOptions">
+                            <span class="customOption" data-value="INR">₹ INR</span>
+                            <span class="customOption" data-value="EUR">€ EUR</span>
+                            <span class="customOption" data-value="USD">$ USD</span>
+                        </div>
+                    </div>
+
                     <button id="themeToggleBtn" class="btnPill" aria-label="Toggle Theme">
                         <span class="themeIcon">☀</span>
                     </button>
@@ -139,13 +178,13 @@
 
             <div class="templateViewerGrid">
                 <div class="templateTabs">
-                    <button class="templateTabBtn isActive" data-url="https://template1-demo.netlify.app/" data-odometer>Template 1</button>
-                    <button class="templateTabBtn" data-url="https://template2-demo.netlify.app/" data-odometer>Template 2</button>
-                    <button class="templateTabBtn" data-url="https://template3-demo.netlify.app/" data-odometer>Template 3</button>
-                    <button class="templateTabBtn" data-url="https://template4-demo.netlify.app/" data-odometer>Template 4</button>
-                    <button class="templateTabBtn" data-url="https://template5-demo.netlify.app/" data-odometer>Template 5</button>
-                    <button class="templateTabBtn" data-url="https://template6-demo.netlify.app/" data-odometer>Template 6</button>
-                    <button class="templateTabBtn customOption" data-url="custom" data-odometer>Custom Design</button>
+                    <button class="templateTabBtn isActive" data-url="https://template1-demo.netlify.app/">Template 1</button>
+                    <button class="templateTabBtn" data-url="https://template2-demo.netlify.app/">Template 2</button>
+                    <button class="templateTabBtn" data-url="https://template3-demo.netlify.app/">Template 3</button>
+                    <button class="templateTabBtn" data-url="https://template4-demo.netlify.app/">Template 4</button>
+                    <button class="templateTabBtn" data-url="https://template5-demo.netlify.app/">Template 5</button>
+                    <button class="templateTabBtn" data-url="https://template6-demo.netlify.app/">Template 6</button>
+                    <button class="templateTabBtn customOption" data-url="custom">Custom Design</button>
                 </div>
 
                 <div class="previewContainer glassCard">
@@ -159,7 +198,7 @@
                         <a href="https://saas-dashboard-demo.netlify.app" id="externalDemoBtn" target="_blank" rel="noopener noreferrer" class="btnExternalLaunch">Open In New Tab ↗</a>
                     </div>
                     <div class="iframeWrapper" id="iframeWrapper">
-                        <iframe id="templateFrame" title="Template Live Preview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+                        <iframe id="templateFrame" title="Template Live Preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
 
                         <div id="mobileLaunchNotice" class="mobileNotice">
                             <p id="mobileNoticeText">Previewing Template, switch to Laptop or PC for better view.</p>
@@ -169,7 +208,7 @@
                         <div id="customBanner" class="customNotice isCardHidden">
                             <h3>Custom Site Design</h3>
                             <p>Have a unique vision? Contact Us to get started!</p>
-                            <a href="#contactSection" class="btnPill btnDark" data-odometer>Discuss Custom Project</a>
+                            <a href="#contactSection" class="btnPill btnDark">Discuss Custom Project</a>
                         </div>
                     </div>
                 </div>
@@ -177,67 +216,435 @@
         </section>
 
         <section id="servicesSection" class="contentSection">
-            <h2 class="sectionTitle" data-odometer-repeat>TIERS AND PRICING</h2>
-            <div class="pricingGrid">
-                <div class="priceCard glassCard tierCard">
-                    <h3>PRE-MADE TEMPLATE</h3>
-                    <div class="priceValue">Rs 6999</div>
-                    <ul class="featureList">
-                        <li>Choice of Pre-built Template</li>
-                        <li>Fast Deployment</li>
-                        <li>Custom Text & Assets Integration</li>
-                        <li>Responsive Mobile Design</li>
-                    </ul>
-                    <a href="#contactSection" class="btnPill" data-odometer>Select Template</a>
-                </div>
-                <div class="priceCard glassCard tierCard featuredCard">
-                    <div class="popularBadge">POPULAR</div>
-                    <h3>HYBRID BUILD</h3>
-                    <div class="priceValue">Rs 9999</div>
-                    <ul class="featureList">
-                        <li>Template Base + Custom Module Addons</li>
-                        <li>Template Theme, customized colors</li>
-                        <li>Performance & Security Hardening</li>
-                        <li>SEO + Search Indexing</li>
-                    </ul>
-                    <a href="#contactSection" class="btnPill btnDark" data-odometer>Select Hybrid</a>
-                </div>
-                <div class="priceCard glassCard tierCard">
-                    <h3>FULL CUSTOM SITE</h3>
-                    <div class="priceValue">Rs 14999</div>
-                    <ul class="featureList">
-                        <li>100% Bespoke Architecture & UI</li>
-                        <li>Simple Backend API Integration</li>
-                        <li>Headless CMS Integration</li>
-                        <li>SEO + Search Indexing</li>
-                    </ul>
-                    <a href="#contactSection" class="btnPill" data-odometer>Select Custom</a>
-                </div>
-                <div class="priceCard glassCard tierCard">
-                    <h3>E-Commerce</h3>
-                    <div class="priceValue">Tailored Pricing</div>
-                    <ul class="featureList">
-                        <li>100% Bespoke Architecture & UI</li>
-                        <li>Advanced Backend API Integration</li>
-                        <li>Headless CMS Integration, Rate Limiting, Security Hardening</li>
-                        <li>SEO + Search Indexing</li>
-                    </ul>
-                    <a href="#contactSection" class="btnPill" data-odometer>Select E-Commerce</a>
-                </div>                
-            </div>
-        </section>
+            <h2 class="sectionTitle" data-odometer-repeat>PRODUCTS</h2>
+            <p class="sectionSub">Compare all 5 products side-by-side or scroll to pick your plan. Fully responsive from small
+                mobile screens to 4K TVs.</p>
 
-        <section id="aboutSection" class="contentSection">
-            <h2 class="sectionTitle" data-odometer-repeat>ABOUT ME</h2>
-            <div class="aboutGrid glassCard aboutCard">
-                <div class="aboutText">
-                    <p>Hello! I am Abushama, a Web Developer. I have been making websites, apps and games for fun since I was 15. I kept going and fueled all that passion into 4+ years of firsthand experience, still pushing my capabilities further into making something meaningful.</p>
-                    <p>I help brands turn their ideas into production-ready sites with my expertise in web dev, and UI/UX. Every project of mine, be it personal or business, is built with four core pillars: speed, security, performance and design.</p>
-                    <p>My goal is simple, to deliver modern, scalable and clean web architecture engineered to meet today's highest standards.</p>
+            <!-- Mobile Responsive Tier Cards (Clean Vertical Breakdown for Mobile/Tablets) -->
+            <div class="mobilePricingContainer">
+                <div class="mobileTierNav">
+                    <button type="button" class="mobileTierTab" data-mobile-tier="0">Template</button>
+                    <button type="button" class="mobileTierTab active" data-mobile-tier="1">Hybrid ★</button>
+                    <button type="button" class="mobileTierTab" data-mobile-tier="2">Full Custom</button>
+                    <button type="button" class="mobileTierTab" data-mobile-tier="3">E-Commerce</button>
+                    <button type="button" class="mobileTierTab" data-mobile-tier="4">Audit</button>
                 </div>
-                <div class="aboutStats">
-                    <img src="images/glorp.jpg" class="pfp" alt="Profile">
-                    <div class="statItem">abu.dev</div>
+
+                <div class="mobileTierCards">
+                    <!-- Mobile Card 0: Pre-made Template -->
+                    <div class="mobileTierCard" data-mobile-card="0">
+                        <div class="mobileCardHeader">
+                            <div class="tierPillHeader badgeOrange">PRE-MADE TEMPLATE</div>
+                            <span class="mobileCardSub">Fast & affordable pre-built turnkey launch</span>
+                        </div>
+                        <ul class="mobileFeaturesList">
+                            <li class="included"><span class="checkIcon checkOrange">✓</span> Pre-built Template Selection</li>
+                            <li class="included"><span class="checkIcon checkOrange">✓</span> Custom Text & Assets Integration</li>
+                            <li class="included"><span class="checkIcon checkOrange">✓</span> Responsive Mobile, PC & TV Layout</li>
+                            <li class="excluded"><span class="crossIcon">✕</span> Custom Addons & Color Branding</li>
+                            <li class="excluded"><span class="crossIcon">✕</span> SEO Optimization & Search Indexing</li>
+                            <li class="excluded"><span class="crossIcon">✕</span> Performance & Security Hardening</li>
+                        </ul>
+                        <div class="receiptSlot mobileReceiptSlot">
+                            <div class="receiptPaper bannerOrange">
+                                <div class="receiptTearLine"></div>
+                                <div class="receiptMeta">                                
+                                    <span class="priceSub">STARTING AT</span>
+                                </div>
+                                <div class="priceValue" data-inr="₹4,999" data-eur="€50" data-usd="$55">₹4,999</div>
+                                <button type="button" class="btnPill selectPlanBtn" data-service="Pre-made Template">Select</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Card 1: Hybrid Build (Default Active) -->
+                    <div class="mobileTierCard active" data-mobile-card="1">
+                        <div class="mobileCardHeader">
+                            <div class="popularBadge">POPULAR</div>
+                            <div class="tierPillHeader badgePink">HYBRID BUILD</div>
+                            <span class="mobileCardSub">The ideal sweet spot for growing brands</span>
+                        </div>
+                        <ul class="mobileFeaturesList">
+                            <li class="included"><span class="checkIcon checkPink">✓</span> Pre-built Template Selection</li>
+                            <li class="included"><span class="checkIcon checkPink">✓</span> Custom Text & Assets Integration</li>
+                            <li class="included"><span class="checkIcon checkPink">✓</span> Responsive Mobile, PC & TV Layout</li>
+                            <li class="included"><span class="checkIcon checkPink">✓</span> Custom Module Addons & Branding</li>
+                            <li class="included"><span class="checkIcon checkPink">✓</span> SEO Optimization & Search Indexing</li>
+                            <li class="included"><span class="checkIcon checkPink">✓</span> Performance & Security Hardening</li>
+                            <li class="excluded"><span class="crossIcon">✕</span> 100% Bespoke Code Architecture</li>
+                            <li class="excluded"><span class="crossIcon">✕</span> Backend API & Headless CMS</li>
+                        </ul>
+                        <div class="receiptSlot mobileReceiptSlot">
+                            <div class="receiptPaper bannerPink">
+                                <div class="receiptTearLine"></div>
+                                <div class="receiptMeta">
+                                    <span class="priceSub">STARTING AT</span>
+                                </div>
+                                <div class="priceValue" data-inr="₹9,999" data-eur="€150" data-usd="$175">₹9,999</div>
+                                <button type="button" class="btnPill selectPlanBtn" data-service="Hybrid Build">Select</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Card 2: Full Custom Site -->
+                    <div class="mobileTierCard" data-mobile-card="2">
+                        <div class="mobileCardHeader">
+                            <div class="tierPillHeader badgePurple">FULL CUSTOM SITE</div>
+                            <span class="mobileCardSub">100% bespoke engineering built from zero</span>
+                        </div>
+                        <ul class="mobileFeaturesList">
+                            <li class="included"><span class="checkIcon checkPurple">✓</span> 100% Bespoke Architecture & UI/UX</li>
+                            <li class="included"><span class="checkIcon checkPurple">✓</span> Backend API & Headless CMS Integration</li>
+                            <li class="included"><span class="checkIcon checkPurple">✓</span> Custom Text & Assets Integration</li>
+                            <li class="included"><span class="checkIcon checkPurple">✓</span> Responsive Mobile, PC & TV Layout</li>
+                            <li class="included"><span class="checkIcon checkPurple">✓</span> Custom Module Addons & Color Branding</li>
+                            <li class="included"><span class="checkIcon checkPurple">✓</span> SEO Optimization & Search Indexing</li>
+                            <li class="included"><span class="checkIcon checkPurple">✓</span> Performance & Security Hardening</li>
+                        </ul>
+                        <div class="receiptSlot mobileReceiptSlot">
+                            <div class="receiptPaper bannerPurple">
+                                <div class="receiptTearLine"></div>
+                                <div class="receiptMeta">
+                                    <span class="priceSub">STARTING AT</span>
+                                </div>
+                                <div class="priceValue" data-inr="₹14,999" data-eur="€250" data-usd="$275">₹14,999</div>
+                                <button type="button" class="btnPill selectPlanBtn" data-service="Full Custom Site">Select</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Card 3: E-Commerce -->
+                    <div class="mobileTierCard" data-mobile-card="3">
+                        <div class="mobileCardHeader">
+                            <div class="tierPillHeader badgeBlue">E-COMMERCE</div>
+                            <span class="mobileCardSub">Full-featured digital storefront & payment flow</span>
+                        </div>
+                        <ul class="mobileFeaturesList">
+                            <li class="included"><span class="checkIcon checkBlue">✓</span> Advanced E-Commerce & Checkout Flow</li>
+                            <li class="included"><span class="checkIcon checkBlue">✓</span> Payment Gateway Integration (Stripe/Razorpay)</li>
+                            <li class="included"><span class="checkIcon checkBlue">✓</span> Product Catalog & Cart Management</li>
+                            <li class="included"><span class="checkIcon checkBlue">✓</span> Responsive Mobile, PC & TV Layout</li>
+                            <li class="included"><span class="checkIcon checkBlue">✓</span> Custom Module Addons & Branding</li>
+                            <li class="included"><span class="checkIcon checkBlue">✓</span> SEO Optimization & Search Indexing</li>
+                            <li class="included"><span class="checkIcon checkBlue">✓</span> Performance & Security Hardening</li>
+                        </ul>
+                        <div class="receiptSlot mobileReceiptSlot">
+                            <div class="receiptPaper bannerBlue">
+                                <div class="receiptTearLine"></div>
+                                <div class="receiptMeta">
+                                    <span class="priceSub">PRICING</span>
+                                </div>
+                                <div class="priceValue" data-inr="Tailored" data-eur="Tailored" data-usd="Tailored">Tailored</div>
+                                <button type="button" class="btnPill selectPlanBtn" data-service="E-Commerce">Select</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Card 4: Website Audit -->
+                    <div class="mobileTierCard" data-mobile-card="4">
+                        <div class="mobileCardHeader">
+                            <div class="tierPillHeader badgeGreen">WEBSITE AUDIT</div>
+                            <span class="mobileCardSub">Comprehensive diagnostic, speed & security audit</span>
+                        </div>
+                        <ul class="mobileFeaturesList">
+                            <li class="included"><span class="checkIcon checkGreen">✓</span> Comprehensive Site Audit & Bug Fixes</li>
+                            <li class="included"><span class="checkIcon checkGreen">✓</span> Performance & Security Hardening</li>
+                            <li class="included"><span class="checkIcon checkGreen">✓</span> Lighthouse Speed & Core Web Vitals</li>
+                            <li class="included"><span class="checkIcon checkGreen">✓</span> Security Header Hardening & Review</li>
+                            <li class="included"><span class="checkIcon checkGreen">✓</span> SEO Optimization & Search Indexing</li>
+                        </ul>
+                        <div class="receiptSlot mobileReceiptSlot">
+                            <div class="receiptPaper bannerGreen">
+                                <div class="receiptTearLine"></div>
+                                <div class="receiptMeta">
+                                    <span class="priceSub">FLAT FEE</span>
+                                </div>
+                                <div class="priceValue" data-inr="₹4,999" data-eur="€50" data-usd="$50">₹4,999</div>
+                                <button type="button" class="btnPill selectPlanBtn" data-service="Website Audit">Select</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobileMatrixToggleWrapper">
+                    <button type="button" class="btnPill mobileMatrixToggleBtn" id="mobileMatrixToggleBtn">
+                        <span class="toggleIcon">⊞</span> View Full Comparison Matrix
+                    </button>
+                </div>
+            </div>
+
+            <!-- Responsive Matrix & Card Container -->
+            <div class="matrixScrollWrapper">
+                <div class="pricingMatrixTable">
+
+                    <!-- MATRIX HEADER ROW: Title + 5 Tier Products -->
+                    <div class="matrixRow matrixHeaderRow">
+                        <div class="matrixCol featureInfoCol">
+                            <h3 class="matrixMainHeading">PRICING PLANS</h3>
+                            <p class="matrixSubHeading">Select a tier that matches your scope and scale.</p>
+                        </div>
+
+                        <!-- Tier 1: Pre-made Template -->
+                        <div class="matrixCol tierCol" data-tier-id="Pre-made Template">
+                            <div class="tierPillHeader badgeOrange">PRE-MADE TEMPLATE</div>
+                        </div>
+
+                        <!-- Tier 2: Hybrid Build (Featured / Popular) -->
+                        <div class="matrixCol tierCol featuredTier" data-tier-id="Hybrid Build">
+                            <div class="popularBadge">POPULAR</div>
+                            <div class="tierPillHeader badgePink">HYBRID BUILD</div>
+                        </div>
+
+                        <!-- Tier 3: Full Custom Site -->
+                        <div class="matrixCol tierCol" data-tier-id="Full Custom Site">
+                            <div class="tierPillHeader badgePurple">FULL CUSTOM SITE</div>
+                        </div>
+
+                        <!-- Tier 4: E-Commerce -->
+                        <div class="matrixCol tierCol" data-tier-id="E-Commerce">
+                            <div class="tierPillHeader badgeBlue">E-COMMERCE</div>
+                        </div>
+
+                        <!-- Tier 5: Website Audit -->
+                        <div class="matrixCol tierCol" data-tier-id="Website Audit">
+                            <div class="tierPillHeader badgeGreen">WEBSITE AUDIT</div>
+                        </div>
+                    </div>
+
+                    <!-- ======================================================== -->
+                    <!-- MUTABLE FEATURE ROWS: ADD / EDIT / DELETE ROWS BELOW    -->
+                    <!-- ======================================================== -->
+
+                    <!-- Feature Row 1 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Pre-built Template Selection</span>
+                            <span class="featureDesc">Choose from our curated library of responsive pre-engineered
+                                templates.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkOrange">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPink">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                    </div>
+
+                    <!-- Feature Row 2 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Custom Text & Assets Integration</span>
+                            <span class="featureDesc">Integration of your custom copy, images, branding colors, and logo.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkOrange">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPink">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPurple">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkGreen">✓</span></div>
+                    </div>
+
+                    <!-- Feature Row 3 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Responsive Mobile, PC & TV Layout</span>
+                            <span class="featureDesc">Optimized display across smartphones, tablets, laptops, desktop PCs, and
+                                smart TVs.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkOrange">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPink">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPurple">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkGreen">✓</span></div>
+                    </div>
+
+                    <!-- Feature Row 4 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Custom Module Addons & Color Branding</span>
+                            <span class="featureDesc">Tailored color themes and bespoke layout modifications over a template
+                                base.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPink">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPurple">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                    </div>
+
+                    <!-- Feature Row 5 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">SEO Optimization & Search Indexing</span>
+                            <span class="featureDesc">Meta tags, Open Graph setup, XML sitemap generation, and search engine
+                                indexing.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPink">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPurple">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkGreen">✓</span></div>
+                    </div>
+
+                    <!-- Feature Row 6 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Performance & Security Hardening</span>
+                            <span class="featureDesc">Asset optimization, speed tuning, security header policies, and rate
+                                limiting.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPink">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPurple">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkGreen">✓</span></div>
+                    </div>
+
+                    <!-- Feature Row 7 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">100% Bespoke Architecture & UI/UX</span>
+                            <span class="featureDesc">Fully custom website design and frontend codebase tailored specifically to
+                                your brand.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPurple">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                    </div>
+
+                    <!-- Feature Row 8 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Backend API & Headless CMS Integration</span>
+                            <span class="featureDesc">Connect dynamic databases, custom APIs, contact dispatches, and headless
+                                CMS platforms.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkPurple">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                    </div>
+
+                    <!-- Feature Row 9 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Advanced E-Commerce & Payment Gateway</span>
+                            <span class="featureDesc">Shopping cart, secure online checkout integration, inventory management,
+                                and store UX.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkBlue">✓</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                    </div>
+
+                    <!-- Feature Row 10 -->
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">Comprehensive Site Audit & Bug Fixes</span>
+                            <span class="featureDesc">In-depth vulnerability review, code cleanup, performance debugging, and
+                                site updates.</span>
+                        </div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="crossIcon">✕</span></div>
+                        <div class="matrixCol tierCol"><span class="checkIcon checkGreen">✓</span></div>
+                    </div>
+
+                    <!-- MATRIX FOOTER ROW: INTERACTIVE RECEIPT SLOTS & ACTIONS -->
+                    <div class="matrixRow matrixFooterRow">
+                        <div class="matrixCol featureInfoCol receiptInfoCol">
+                            <div class="receiptPrinterLabel">
+                                <span class="printerLed"></span>
+                                <span class="printerSlotHeading">INVESTMENT SUMMARY</span>
+                            </div>
+                            <span class="printerSlotSub">Transparent Pricing • No Hidden Cost</span>
+                        </div>
+
+                        <!-- 1. Pre-made Template Receipt -->
+                        <div class="matrixCol tierCol">
+                            <div class="receiptSlot">
+                                <div class="receiptPaper bannerOrange">
+                                    <div class="receiptSpacing">
+                                        <div class="receiptTearLine"></div>
+                                        <div class="receiptMeta">
+                                            <span class="priceSub">STARTING AT</span>
+                                        </div>
+                                        <div class="priceValue" data-inr="₹4,999" data-eur="€50" data-usd="$55">₹4,999</div>
+                                        <button type="button" class="btnPill selectPlanBtn" data-service="Pre-made Template">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Hybrid Build Receipt -->
+                        <div class="matrixCol tierCol">
+                            <div class="receiptSlot">
+                                <div class="receiptPaper bannerPink">
+                                    <div class="receiptSpacing">
+                                        <div class="receiptTearLine"></div>
+                                        <div class="receiptMeta">
+                                            <span class="priceSub">STARTING AT</span>
+                                        </div>
+                                        <div class="priceValue" data-inr="₹9,999" data-eur="€150" data-usd="$175">₹9,999</div>
+                                        <button type="button" class="btnPill selectPlanBtn" data-service="Hybrid Build">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Full Custom Site Receipt -->
+                        <div class="matrixCol tierCol">
+                            <div class="receiptSlot">
+                                <div class="receiptPaper bannerPurple">
+                                    <div class="receiptSpacing">
+                                        <div class="receiptTearLine"></div>
+                                        <div class="receiptMeta">
+                                            <span class="priceSub">STARTING AT</span>
+                                        </div>
+                                        <div class="priceValue" data-inr="₹14,999" data-eur="€250" data-usd="$275">₹14,999</div>
+                                        <button type="button" class="btnPill selectPlanBtn" data-service="Full Custom Site">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. E-Commerce Receipt -->
+                        <div class="matrixCol tierCol">
+                            <div class="receiptSlot">
+                                <div class="receiptPaper bannerBlue">
+                                    <div class="receiptSpacing">
+                                        <div class="receiptTearLine"></div>
+                                        <div class="receiptMeta">
+                                            <span class="priceSub">PRICING</span>
+                                        </div>
+                                        <div class="priceValue" data-inr="Tailored" data-eur="Tailored" data-usd="Tailored">Tailored</div>
+                                        <button type="button" class="btnPill selectPlanBtn" data-service="E-Commerce">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Website Audit Receipt -->
+                        <div class="matrixCol tierCol">
+                            <div class="receiptSlot">
+                                <div class="receiptPaper bannerGreen">
+                                    <div class="receiptSpacing">
+                                        <div class="receiptTearLine"></div>
+                                        <div class="receiptMeta">
+                                            <span class="priceSub">STARTING AT</span>
+                                        </div>
+                                        <div class="priceValue" data-inr="₹4,999" data-eur="€50" data-usd="$50">₹4,999</div>
+                                        <button type="button" class="btnPill selectPlanBtn" data-service="Website Audit">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -247,24 +654,30 @@
                 <h2 class="sectionTitle" data-odometer-repeat>START A PROJECT</h2>
                 
                 <ul class="wrapper">
-                    <li class="icon instagram">
-                        <span class="tooltip">Instagram ↗</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
-                        </svg>
-                    </li>
-                    <li class="icon whatsapp">
-                        <span class="tooltip">WhatsApp ↗</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.57 6.57 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007s-.346.05-.527.247c-.182.198-.691.677-.691 1.654s.707 1.916.806 2.05c.1.133 1.392 2.125 3.372 2.98.47.203.838.324 1.125.415.473.15.903.129 1.243.078.38-.058 1.17-.478 1.336-.94.166-.462.166-.857.117-.94-.05-.083-.182-.133-.38-.232z"/>
-                        </svg>
-                    </li>
-                    <li class="icon gmail">
-                        <span class="tooltip">Gmail ↗</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-.739-.756zm8.808-4.133l-5.803 3.558L16 11.801V4.697z"/>
-                        </svg>
-                    </li>
+                    <a href="https://www.instagram.com/abumakeswebsites/" target="_blank" rel="noopener noreferrer">
+                        <li class="icon instagram">
+                            <span class="tooltip">Instagram ↗</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path>
+                            </svg>
+                        </li>
+                    </a>
+                    <a href="https://wa.me/917039224553" target="_blank" rel="noopener noreferrer">
+                        <li class="icon whatsapp">
+                            <span class="tooltip">WhatsApp ↗</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.57 6.57 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007s-.346.05-.527.247c-.182.198-.691.677-.691 1.654s.707 1.916.806 2.05c.1.133 1.392 2.125 3.372 2.98.47.203.838.324 1.125.415.473.15.903.129 1.243.078.38-.058 1.17-.478 1.336-.94.166-.462.166-.857.117-.94-.05-.083-.182-.133-.38-.232z"/>
+                            </svg>
+                        </li>
+                    </a>
+                    <a href="mailto:abu.techdev@gmail.com">
+                        <li class="icon gmail">
+                            <span class="tooltip">Gmail ↗</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-.739-.756zm8.808-4.133l-5.803 3.558L16 11.801V4.697z"/>
+                            </svg>
+                        </li>
+                    </a>
                 </ul>
             </div>
             <div class="contactWrapper glassCard">
@@ -277,7 +690,8 @@
                             <label class="chipCheck"><input type="checkbox" name="serviceType" value="Pre-made Template"> <span>Pre-made Template</span></label>
                             <label class="chipCheck"><input type="checkbox" name="serviceType" value="Hybrid Build"> <span>Hybrid Build</span></label>
                             <label class="chipCheck"><input type="checkbox" name="serviceType" value="Full Custom Site"> <span>Full Custom Site</span></label>
-                            <label class="chipCheck"><input type="checkbox" name="serviceType" value="Security Audit / Fix"> <span>Security Audit</span></label>
+                            <label class="chipCheck"><input type="checkbox" name="serviceType" value="E-Commerce"> <span>E-Commerce</span></label>
+                            <label class="chipCheck"><input type="checkbox" name="serviceType" value="Website Audit"> <span>Website Audit</span></label>
                         </div>
                     </div>
 
@@ -291,10 +705,7 @@
                                         <div class="arrow"></div>
                                     </div>
                                     <div class="customOptions">
-                                        <span class="customOption" data-value="$500 - $1,000">$500 - $1,000</span>
-                                        <span class="customOption" data-value="$1,000 - $3,000">$1,000 - $3,000</span>
-                                        <span class="customOption" data-value="$3,000 - $5,000">$3,000 - $5,000</span>
-                                        <span class="customOption" data-value="$5,000+">$5,000+</span>
+                                        <!-- Dynamically populated according to selected currency -->
                                     </div>
                                 </div>
                                 <input type="hidden" id="projectBudget" name="projectBudget">
@@ -327,7 +738,7 @@
                         </div>
                         <div class="formGroup">
                             <label for="userEmail">Your Email *</label>
-                            <input type="email" id="userEmail" name="userEmail" maxlength="100" required placeholder="Enter Email">
+                            <input type="email" id="userEmail" name="email" maxlength="100" required placeholder="Enter Email">
                         </div>
                     </div>
 
@@ -336,8 +747,40 @@
                         <textarea id="userMessage" name="userMessage" rows="5" required placeholder="Describe your project, target audience, and specific features needed..."></textarea>
                     </div>
 
-                    <button type="submit" id="submitBtn" class="btnPill btnDark" data-odometer>Send Inquiry</button>
+                    <button type="submit" id="submitBtn" class="btnInquiry">
+                    <!-- Incoming arrow from left -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 32 24">
+                        <path d="M29 12H3m26 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    
+                    <span class="btnText">Send Inquiry</span>
+                    
+                    <!-- Outgoing arrow to right -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 32 24">
+                        <path d="M29 12H3m26 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    </button>
                 </form>
+            </div>
+        </section>
+
+        <section id="aboutSection" class="contentSection">
+            <h2 class="sectionTitle" data-odometer-repeat>ABOUT ME</h2>
+            <div class="aboutGrid glassCard aboutCard">
+                <div class="aboutText">
+                    <p>Hello! I am Abushama, a Web Developer. I have been making websites, apps and games for fun since I was
+                        15. I kept going and fueled all that passion into 4+ years of firsthand experience, still pushing my
+                        capabilities further into making something meaningful.</p>
+                    <p>I help brands turn their ideas into production-ready sites with my expertise in web dev, and UI/UX. Every
+                        project of mine, be it personal or business, is built with four core pillars: speed, security,
+                        performance and design.</p>
+                    <p>My goal is simple, to deliver modern, scalable and clean web architecture engineered to meet today's
+                        highest standards.</p>
+                </div>
+                <div class="aboutStats">
+                    <img src="images/glorp.jpg" class="pfp" alt="Portrait of Abushama, web developer" width="256" height="256" loading="lazy" decoding="async">
+                    <div class="statItem">abu.dev</div>
+                </div>
             </div>
         </section>
     </main>

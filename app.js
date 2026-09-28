@@ -1,578 +1,880 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const invertedCursor = document.getElementById('invertedCursor');
-    const cursorToggleBtns = document.querySelectorAll('.cursorToggleBtn');
-    const iframeWrapper = document.getElementById('iframeWrapper');
-    let isCursorEnabled = true;
+/* ============================================================================
+ * [ABU.DEV] — front-end behaviour
+ * ========================================================================== */
+(() => {
+    'use strict';
 
-    if (cursorToggleBtns.length > 0) {
-        cursorToggleBtns.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                isCursorEnabled = !isCursorEnabled;
-                document.querySelectorAll('.cursorBtnText').forEach((label) => {
-                    label.textContent = isCursorEnabled ? 'Cursor FX: ON' : 'Cursor FX: OFF';
-                });
+    /* ------------------------------------------------------------------ dynamic data */
+    const PRICING_DATA = {
+        tiers: [
+            {
+                id: 'Pre-made Template',
+                name: 'PRE-MADE TEMPLATE',
+                badgeClass: 'badgeOrange',
+                bannerClass: 'bannerOrange',
+                checkClass: 'checkOrange',
+                sub: 'Fast & affordable pre-built turnkey launch',
+                priceLabel: 'STARTING AT',
+                prices: { inr: '₹4,999', eur: '€50', usd: '$55' }
+            },
+            {
+                id: 'Hybrid Build',
+                name: 'HYBRID BUILD',
+                badgeClass: 'badgePink',
+                bannerClass: 'bannerPink',
+                checkClass: 'checkPink',
+                sub: 'The ideal sweet spot for growing brands',
+                popular: true,
+                priceLabel: 'STARTING AT',
+                prices: { inr: '₹9,999', eur: '€150', usd: '$175' }
+            },
+            {
+                id: 'Full Custom Site',
+                name: 'FULL CUSTOM SITE',
+                badgeClass: 'badgePurple',
+                bannerClass: 'bannerPurple',
+                checkClass: 'checkPurple',
+                sub: '100% bespoke engineering built from zero',
+                priceLabel: 'STARTING AT',
+                prices: { inr: '₹14,999', eur: '€250', usd: '$275' }
+            },
+            {
+                id: 'E-Commerce',
+                name: 'E-COMMERCE',
+                badgeClass: 'badgeBlue',
+                bannerClass: 'bannerBlue',
+                checkClass: 'checkBlue',
+                sub: 'Full-featured digital storefront & payment flow',
+                priceLabel: 'PRICING',
+                prices: { inr: 'Tailored', eur: 'Tailored', usd: 'Tailored' }
+            },
+            {
+                id: 'Website Audit',
+                name: 'WEBSITE AUDIT',
+                badgeClass: 'badgeGreen',
+                bannerClass: 'bannerGreen',
+                checkClass: 'checkGreen',
+                sub: 'Comprehensive diagnostic, speed & security audit',
+                priceLabel: 'FLAT FEE',
+                prices: { inr: '₹4,999', eur: '€50', usd: '$50' }
+            }
+        ],
+        features: [
+            {
+                title: 'Pre-built Template Selection',
+                desc: 'Choose from our curated library of responsive pre-engineered templates.',
+                included: [true, true, false, false, false]
+            },
+            {
+                title: 'Custom Text & Assets Integration',
+                desc: 'Integration of your custom copy, images, branding colors, and logo.',
+                included: [true, true, true, true, true]
+            },
+            {
+                title: 'Responsive Mobile, PC & TV Layout',
+                desc: 'Optimized display across smartphones, tablets, laptops, desktop PCs, and smart TVs.',
+                included: [true, true, true, true, true]
+            },
+            {
+                title: 'Custom Module Addons & Color Branding',
+                desc: 'Tailored color themes and bespoke layout modifications over a template base.',
+                included: [false, true, true, true, false]
+            },
+            {
+                title: 'SEO Optimization & Search Indexing',
+                desc: 'Meta tags, Open Graph setup, XML sitemap generation, and search engine indexing.',
+                included: [false, true, true, true, true]
+            },
+            {
+                title: 'Performance & Security Hardening',
+                desc: 'Asset optimization, speed tuning, security header policies, and rate limiting.',
+                included: [false, true, true, true, true]
+            },
+            {
+                title: '100% Bespoke Architecture & UI/UX',
+                desc: 'Fully custom website design and frontend codebase tailored specifically to your brand.',
+                included: [false, false, true, true, false]
+            },
+            {
+                title: 'Backend API & Headless CMS Integration',
+                desc: 'Connect dynamic databases, custom APIs, contact dispatches, and headless CMS platforms.',
+                included: [false, false, true, true, false]
+            },
+            {
+                title: 'Advanced E-Commerce & Payment Gateway',
+                desc: 'Shopping cart, secure online checkout integration, inventory management, and store UX.',
+                included: [false, false, false, true, false]
+            },
+            {
+                title: 'Comprehensive Site Audit & Bug Fixes',
+                desc: 'In-depth vulnerability review, code cleanup, performance debugging, and site updates.',
+                included: [false, false, false, false, true]
+            }
+        ]
+    };
 
-                if (invertedCursor) {
-                    if (isCursorEnabled) {
-                        invertedCursor.classList.remove('isHidden');
-                    } else {
-                        invertedCursor.classList.add('isHidden');
-                        invertedCursor.style.opacity = '0';
-                    }
-                }
+    /* ------------------------------------------------------------------ utils */
+
+    const $ = (selector, scope = document) => scope.querySelector(selector);
+    const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+
+    const on = (target, type, handler, options) => {
+        if (target) target.addEventListener(type, handler, options);
+    };
+
+    const store = {
+        get(key) {
+            try { return window.localStorage.getItem(key); } catch (error) { return null; }
+        },
+        set(key, value) {
+            try { window.localStorage.setItem(key, value); } catch (error) { /* storage blocked */ }
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const root = document.documentElement;
+        const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const scrollBehavior = () => (motionQuery.matches ? 'auto' : 'smooth');
+
+        const pointer = { x: null, y: null };
+
+        /* ------------------------------------------------------------- dynamic pricing rendering */
+
+        const renderPricingSystem = () => {
+            const mobileCardsContainer = $('.mobileTierCards');
+            const matrixTableContainer = $('.pricingMatrixTable');
+            if (!mobileCardsContainer || !matrixTableContainer) return;
+
+            // Render Mobile Cards
+            mobileCardsContainer.innerHTML = PRICING_DATA.tiers.map((tier, idx) => `
+                <div class="mobileTierCard ${idx === 1 ? 'active' : ''}" data-mobile-card="${idx}">
+                    <div class="mobileCardHeader">
+                        ${tier.popular ? '<div class="popularBadge">POPULAR</div>' : ''}
+                        <div class="tierPillHeader ${tier.badgeClass}">${tier.name}</div>
+                        <span class="mobileCardSub">${tier.sub}</span>
+                    </div>
+                    <ul class="mobileFeaturesList">
+                        ${PRICING_DATA.features.map(f => {
+                            const isInc = f.included[idx];
+                            return `<li class="${isInc ? 'included' : 'excluded'}">
+                                <span class="${isInc ? 'checkIcon ' + tier.checkClass : 'crossIcon'}">${isInc ? '✓' : '✕'}</span> ${f.title}
+                            </li>`;
+                        }).join('')}
+                    </ul>
+                    <div class="receiptSlot mobileReceiptSlot">
+                        <div class="receiptPaper ${tier.bannerClass}">
+                            <div class="receiptTearLine"></div>
+                            <div class="receiptMeta"><span class="priceSub">${tier.priceLabel}</span></div>
+                            <div class="priceValue" data-inr="${tier.prices.inr}" data-eur="${tier.prices.eur}" data-usd="${tier.prices.usd}">${tier.prices.inr}</div>
+                            <button type="button" class="btnPill selectPlanBtn" data-service="${tier.id}">Select</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Matrix Header
+            let matrixHTML = `
+                <div class="matrixRow matrixHeaderRow">
+                    <div class="matrixCol featureInfoCol">
+                        <h3 class="matrixMainHeading">PRICING PLANS</h3>
+                        <p class="matrixSubHeading">Select a tier that matches your scope and scale.</p>
+                    </div>
+                    ${PRICING_DATA.tiers.map(tier => `
+                        <div class="matrixCol tierCol ${tier.popular ? 'featuredTier' : ''}" data-tier-id="${tier.id}">
+                            ${tier.popular ? '<div class="popularBadge">POPULAR</div>' : ''}
+                            <div class="tierPillHeader ${tier.badgeClass}">${tier.name}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Render Feature Rows
+            PRICING_DATA.features.forEach(feature => {
+                matrixHTML += `
+                    <div class="matrixRow">
+                        <div class="matrixCol featureInfoCol">
+                            <span class="featureTitle">${feature.title}</span>
+                            <span class="featureDesc">${feature.desc}</span>
+                        </div>
+                        ${feature.included.map((inc, i) => `
+                            <div class="matrixCol tierCol">
+                                <span class="${inc ? 'checkIcon ' + PRICING_DATA.tiers[i].checkClass : 'crossIcon'}">${inc ? '✓' : '✕'}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
             });
+
+            // Render Matrix Footer
+            matrixHTML += `
+                <div class="matrixRow matrixFooterRow">
+                    <div class="matrixCol featureInfoCol receiptInfoCol">
+                        <div class="receiptPrinterLabel">
+                            <span class="printerLed"></span>
+                            <span class="printerSlotHeading">INVESTMENT SUMMARY</span>
+                        </div>
+                        <span class="printerSlotSub">Transparent Pricing • No Hidden Cost</span>
+                    </div>
+                    ${PRICING_DATA.tiers.map(tier => `
+                        <div class="matrixCol tierCol">
+                            <div class="receiptSlot">
+                                <div class="receiptPaper ${tier.bannerClass}">
+                                    <div class="receiptSpacing">
+                                        <div class="receiptTearLine"></div>
+                                        <div class="receiptMeta"><span class="priceSub">${tier.priceLabel}</span></div>
+                                        <div class="priceValue" data-inr="${tier.prices.inr}" data-eur="${tier.prices.eur}" data-usd="${tier.prices.usd}">${tier.prices.inr}</div>
+                                        <button type="button" class="btnPill selectPlanBtn" data-service="${tier.id}">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            matrixTableContainer.innerHTML = matrixHTML;
+        };
+
+        renderPricingSystem();
+
+        /* ------------------------------------------------------------- alerts */
+
+        const alertBox = document.getElementById('formAlertBox');
+
+        const showAlert = (message, type = 'info') => {
+            if (!alertBox) return;
+            alertBox.className = `alertMsg alert-${type}`;
+            if (message instanceof Node) {
+                alertBox.replaceChildren(message);
+            } else {
+                alertBox.textContent = message;
+            }
+            alertBox.classList.remove('isCardHidden');
+        };
+
+        document.querySelectorAll('.heroBtn').forEach(btn => {
+            const updateOrigin = (e) => {
+                const rect = btn.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const isLeftSide = mouseX < rect.width / 2;
+                btn.style.setProperty('--transform-origin', isLeftSide ? 'left' : 'right');
+            };
+            btn.addEventListener('mouseenter', updateOrigin);
+            btn.addEventListener('mouseleave', updateOrigin);
         });
-    }
-    
-    function updateCursorPosition(x, y) {
-        if (!isCursorEnabled || !invertedCursor) return;
-        invertedCursor.style.left = `${x}px`;
-        invertedCursor.style.top = `${y}px`;
-    }
 
-    window.addEventListener('mousemove', (e) => {
-        const isAtEdge = e.clientX <= 0 || e.clientY <= 0 || 
-                         e.clientX >= window.innerWidth || e.clientY >= window.innerHeight;
+        /* ----------------------------------------------------- inverted cursor */
 
-        if (isAtEdge) {
-            if (invertedCursor) invertedCursor.style.opacity = '0';
-            return;
-        }
+        const cursor = document.getElementById('invertedCursor');
+        const cursorLabels = $$('.cursorBtnText');
+        let cursorEnabled = Boolean(cursor);
+        let cursorFrame = null;
 
-        if (isCursorEnabled && invertedCursor) {
-            invertedCursor.style.opacity = '1';
-        }
-        updateCursorPosition(e.clientX, e.clientY);
-    });
+        const setCursorVisible = (visible) => {
+            if (!cursor) return;
+            const opacity = (visible && cursorEnabled) ? '1' : '0';
+            if (cursor.style.opacity !== opacity) cursor.style.opacity = opacity;
+        };
 
-    document.documentElement.addEventListener('mouseleave', () => {
-        if (invertedCursor) {
-            invertedCursor.style.opacity = '0';
-        }
-    });
+        const paintCursor = () => {
+            cursorFrame = null;
+            cursor.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0) translate(-50%, -50%)`;
+        };
 
-    document.documentElement.addEventListener('mouseenter', (e) => {
-        if (isCursorEnabled && invertedCursor) {
-            invertedCursor.style.opacity = '1';
-            updateCursorPosition(e.clientX, e.clientY);
-        }
-    });
+        const moveCursor = (x, y) => {
+            pointer.x = x;
+            pointer.y = y;
+            if (cursor && cursorFrame === null) cursorFrame = window.requestAnimationFrame(paintCursor);
+        };
 
-    let touchFadeTimeout = null;
-    let isDragging = false;
-
-    function showAndMoveCursor(x, y) {
-        if (!isCursorEnabled || !invertedCursor) return;
-        invertedCursor.style.opacity = '1';
-        invertedCursor.style.left = `${x}px`;
-        invertedCursor.style.top = `${y}px`;
-    }
-
-    function hideCursor() {
-        if (invertedCursor) {
-            invertedCursor.style.opacity = '0';
-        }
-    }
-
-    window.addEventListener('touchstart', (e) => {
-        if (e.touches.length > 0 && isCursorEnabled) {
-            if (touchFadeTimeout) clearTimeout(touchFadeTimeout);
-            isDragging = false;
-
-            const touch = e.touches[0];
-            showAndMoveCursor(touch.clientX, touch.clientY);
-
-            touchFadeTimeout = setTimeout(() => {
-                if (!isDragging) {
-                    hideCursor();
-                }
-            }, 500);
-        }
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (e) => {
-        if (e.touches.length > 0 && isCursorEnabled) {
-            isDragging = true;
-            if (touchFadeTimeout) clearTimeout(touchFadeTimeout);
-
-            const touch = e.touches[0];
-            showAndMoveCursor(touch.clientX, touch.clientY);
-        }
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-        isDragging = false;
-        if (touchFadeTimeout) clearTimeout(touchFadeTimeout);
-        
-        touchFadeTimeout = setTimeout(() => {
-            hideCursor();
-        }, 400);
-    });
-
-    window.addEventListener('touchcancel', () => {
-        isDragging = false;
-        if (touchFadeTimeout) clearTimeout(touchFadeTimeout);
-        hideCursor();
-    });
-
-    if (iframeWrapper && invertedCursor) {
-        iframeWrapper.addEventListener('mouseenter', () => {
-            invertedCursor.style.opacity = '0';
-        });
-        iframeWrapper.addEventListener('mouseleave', () => {
-            if (isCursorEnabled) invertedCursor.style.opacity = '1';
-        });
-    }
-
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    if (backToTopBtn) {
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+        const toggleCursor = () => {
+            cursorEnabled = !cursorEnabled;
+            cursorLabels.forEach((label) => {
+                label.textContent = cursorEnabled ? 'Cursor FX: ON' : 'Cursor FX: OFF';
             });
+            if (cursor) cursor.classList.toggle('isHidden', !cursorEnabled);
+            setCursorVisible(cursorEnabled);
+        };
+
+        $$('.cursorToggleBtn').forEach((btn) => on(btn, 'click', toggleCursor));
+
+        on(window, 'mousemove', (event) => {
+            pointer.x = event.clientX;
+            pointer.y = event.clientY;
+            if (!cursor) return;
+
+            const atEdge = event.clientX <= 0 || event.clientY <= 0
+                || event.clientX >= window.innerWidth || event.clientY >= window.innerHeight;
+            setCursorVisible(!atEdge);
+            if (!atEdge && cursorEnabled && cursorFrame === null) {
+                cursorFrame = window.requestAnimationFrame(paintCursor);
+            }
+        }, { passive: true });
+
+        on(root, 'mouseleave', () => {
+            pointer.x = null;
+            pointer.y = null;
+            setCursorVisible(false);
         });
-    }
 
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const themeIcon = themeToggleBtn ? themeToggleBtn.querySelector('.themeIcon') : null;
-    
-    if (themeToggleBtn && themeIcon) {
-        const savedTheme = localStorage.getItem('themePreference') || 
-            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        themeIcon.textContent = savedTheme === 'dark' ? '☀' : '☾';
+        on(root, 'mouseenter', () => setCursorVisible(true));
 
-        themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('themePreference', newTheme);
-            themeIcon.textContent = newTheme === 'dark' ? '☀' : '☾';
+        let touchFadeTimer = null;
+        const showTouchCursor = (event) => {
+            const touch = event.touches[0];
+            if (!touch) return;
+            window.clearTimeout(touchFadeTimer);
+            moveCursor(touch.clientX, touch.clientY);
+            setCursorVisible(true);
+        };
+
+        on(window, 'touchstart', (event) => {
+            if (!cursorEnabled) return;
+            showTouchCursor(event);
+            touchFadeTimer = window.setTimeout(() => setCursorVisible(false), 500);
+        }, { passive: true });
+
+        on(window, 'touchmove', (event) => {
+            if (cursorEnabled) showTouchCursor(event);
+        }, { passive: true });
+
+        on(window, 'touchend', () => {
+            window.clearTimeout(touchFadeTimer);
+            touchFadeTimer = window.setTimeout(() => setCursorVisible(false), 400);
+        }, { passive: true });
+
+        on(window, 'touchcancel', () => {
+            window.clearTimeout(touchFadeTimer);
+            setCursorVisible(false);
         });
-    }
 
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const closeNavBtn = document.getElementById('closeNavBtn');
-    const heroNav = document.getElementById('heroNav');
+        on(document.getElementById('iframeWrapper'), 'mouseenter', () => setCursorVisible(false));
+        on(document.getElementById('iframeWrapper'), 'mouseleave', () => setCursorVisible(true));
 
-    function closeMobileMenu() {
-        if (hamburgerBtn) hamburgerBtn.classList.remove('isOpen');
-        if (heroNav) heroNav.classList.remove('isOpen');
-    }
+        /* --------------------------------------------------------- back to top */
 
-    if (hamburgerBtn && heroNav) {
-        hamburgerBtn.addEventListener('click', () => {
+        on(document.getElementById('backToTopBtn'), 'click', () => {
+            window.scrollTo({ top: 0, behavior: scrollBehavior() });
+        });
+
+        /* --------------------------------------------------------- theme toggle */
+
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = themeToggleBtn ? $('.themeIcon', themeToggleBtn) : null;
+        let currentTheme = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+
+        const isDark = () => currentTheme === 'dark';
+
+        const applyTheme = (nextTheme) => {
+            currentTheme = nextTheme === 'light' ? 'light' : 'dark';
+            root.setAttribute('data-theme', currentTheme);
+            if (themeIcon) themeIcon.textContent = isDark() ? '☀' : '☾';
+        };
+
+        if (themeToggleBtn && themeIcon) {
+            const preferred = store.get('themePreference')
+                || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(preferred);
+
+            on(themeToggleBtn, 'click', () => {
+                const next = isDark() ? 'light' : 'dark';
+                store.set('themePreference', next);
+                applyTheme(next);
+            });
+        }
+
+        /* ------------------------------------------------------------ mobile nav */
+
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const heroNav = document.getElementById('heroNav');
+
+        const closeMobileMenu = () => {
+            if (hamburgerBtn) hamburgerBtn.classList.remove('isOpen');
+            if (heroNav) heroNav.classList.remove('isOpen');
+        };
+
+        on(hamburgerBtn, 'click', () => {
+            if (!heroNav) return;
             hamburgerBtn.classList.toggle('isOpen');
             heroNav.classList.toggle('isOpen');
         });
 
-        if (closeNavBtn) {
-            closeNavBtn.addEventListener('click', closeMobileMenu);
-        }
-
-        heroNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', closeMobileMenu);
+        on(document.getElementById('closeNavBtn'), 'click', closeMobileMenu);
+        if (heroNav) $$('a', heroNav).forEach((link) => on(link, 'click', closeMobileMenu));
+        on(document, 'keydown', (event) => {
+            if (event.key === 'Escape') closeMobileMenu();
         });
-    }
 
-    const customSelects = document.querySelectorAll('.customSelect');
-    
-    customSelects.forEach(select => {
-        const trigger = select.querySelector('.customSelectTrigger');
-        const options = select.querySelectorAll('.customOption');
-        const hiddenInput = select.nextElementSibling;
-        const triggerText = trigger ? (trigger.querySelector('.placeholder') || trigger.querySelector('span')) : null;
+        /* ------------------------------------------------------- currency logic */
 
-        if (trigger) {
-            trigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                customSelects.forEach(s => {
-                    if (s !== select) s.classList.remove('open');
-                });
-                select.classList.toggle('open');
-            });
-        }
+        const currencySelect = document.getElementById('currencySelect');
+        const budgetSelect = document.getElementById('budgetSelect');
+        const budgetOptions = budgetSelect ? $('.customOptions', budgetSelect) : null;
+        const budgetInput = document.getElementById('projectBudget');
 
-        options.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const value = option.getAttribute('data-value');
-                const text = option.textContent;
-
-                if (triggerText) {
-                    triggerText.textContent = text;
-                    triggerText.classList.remove('placeholder');
-                }
-                if (hiddenInput) hiddenInput.value = value;
-
-                select.classList.remove('open');
-            });
-        });
-    });
-
-    window.addEventListener('click', () => {
-        customSelects.forEach(select => select.classList.remove('open'));
-    });
-
-    const charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%&";
-
-    function triggerSlotMachine(element) {
-        const originalText = element.dataset.originalText;
-        if (!originalText) return;
-
-        if (element.dataset.activeInterval) {
-            clearInterval(parseInt(element.dataset.activeInterval));
-        }
-        
-        const textLength = originalText.length;
-        let currentArray = originalText.split('');
-
-        for (let i = 0; i < textLength; i++) {
-            if (originalText[i] !== ' ') {
-                currentArray[i] = charSet.charAt(Math.floor(Math.random() * charSet.length));
-            }
-        }
-        element.textContent = currentArray.join('');
-
-        const startTime = Date.now();
-        const durationPerChar = 180;
-
-        const interval = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            let allResolved = true;
-
-            for (let i = 0; i < textLength; i++) {
-                if (originalText[i] === ' ') continue;
-
-                if (elapsed > (i + 1) * durationPerChar) {
-                    currentArray[i] = originalText[i];
-                } else {
-                    currentArray[i] = charSet.charAt(Math.floor(Math.random() * charSet.length));
-                    allResolved = false;
-                }
-            }
-
-            element.textContent = currentArray.join('');
-
-            if (allResolved) {
-                clearInterval(interval);
-                element.textContent = originalText;
-                delete element.dataset.activeInterval;
-            }
-        }, 60);
-
-        element.dataset.activeInterval = interval.toString();
-    }
-
-    const hoverOdometerElements = document.querySelectorAll('[data-odometer]');
-    const isTouchDevice = window.matchMedia('(hover: none)').matches;
-    hoverOdometerElements.forEach((element) => {
-        element.dataset.originalText = element.textContent.trim();
-        
-        if (!isTouchDevice) {
-            element.addEventListener('mouseenter', () => triggerSlotMachine(element));
-            element.addEventListener('mouseleave', () => triggerSlotMachine(element));
-        }
-    });
-
-    const repeatingElements = document.querySelectorAll('[data-odometer-repeat]');
-    repeatingElements.forEach((element) => {
-        element.dataset.originalText = element.textContent.trim();
-    });
-
-    function runRepeatingOdometers() {
-        repeatingElements.forEach((element) => {
-            triggerSlotMachine(element);
-        });
-    }
-
-    runRepeatingOdometers();
-    setInterval(runRepeatingOdometers, 15000);
-
-    const canvas = document.getElementById('particleCanvas');
-    
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        
-        const mouse = {
-            x: null,
-            y: null,
-            radius: 180
+        const CURRENCY_SYMBOLS = { INR: '₹', EUR: '€', USD: '$' };
+        const BUDGET_RANGES = {
+            INR: ['₹5,000 - ₹10,000', '₹10,000 - ₹25,000', '₹25,000 - ₹50,000', '₹50,000+'],
+            EUR: ['€50 - €150', '€150 - €250', '€250 - €500', '€500+'],
+            USD: ['$55 - $175', '$175 - $275', '$275 - $525', '$525+']
         };
 
-        window.addEventListener('mousemove', (event) => {
-            mouse.x = event.clientX;
-            mouse.y = event.clientY;
-        });
-
-        window.addEventListener('mouseleave', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            initParticles();
-        }
-
-        class MagneticParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.vx = (Math.random() - 0.5) * 0.8;
-                this.vy = (Math.random() - 0.5) * 0.8;
-                this.minDistance = 25;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x > canvas.width || this.x < 0) this.vx = -this.vx;
-                if (this.y > canvas.height || this.y < 0) this.vy = -this.vy;
-
-                if (mouse.x !== null && mouse.y !== null) {
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < mouse.radius && distance > this.minDistance) {
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        const pullX = (dx / distance) * force * 0.6;
-                        const pullY = (dy / distance) * force * 0.6;
-
-                        this.x += pullX;
-                        this.y += pullY;
-                    }
+        const resetCustomSelect = (selectEl, placeholderText, hiddenInput) => {
+            if (selectEl) {
+                const label = $('.customSelectTrigger span', selectEl);
+                if (label) {
+                    label.textContent = placeholderText;
+                    label.classList.add('placeholder');
                 }
             }
+            if (hiddenInput) hiddenInput.value = '';
+        };
 
-            draw() {
-                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+        const buildOption = (value) => {
+            const option = document.createElement('span');
+            option.className = 'customOption';
+            option.dataset.value = value;
+            option.textContent = value;
+            return option;
+        };
+
+        const setCurrency = (currency) => {
+            const code = CURRENCY_SYMBOLS[currency] ? currency : 'INR';
+            store.set('selectedCurrency', code);
+
+            const label = currencySelect ? $('.currencyLabel', currencySelect) : null;
+            if (label) label.textContent = `${CURRENCY_SYMBOLS[code]} ${code}`;
+
+            const dataKey = code.toLowerCase();
+            $$('.priceValue').forEach((node) => {
+                const value = node.dataset[dataKey];
+                if (value) node.textContent = value;
+            });
+
+            if (budgetOptions && BUDGET_RANGES[code]) {
+                budgetOptions.replaceChildren(...BUDGET_RANGES[code].map(buildOption));
+                resetCustomSelect(budgetSelect, 'Select Budget Range', budgetInput);
             }
-        }
+        };
 
-        function initParticles() {
-            particlesArray = [];
-            const screenArea = canvas.width * canvas.height;
-            const dynamicParticleCount = Math.floor(screenArea / 14400);
+        setCurrency(store.get('selectedCurrency'));
 
-            for (let i = 0; i < dynamicParticleCount; i++) {
-                particlesArray.push(new MagneticParticle());
+        /* ------------------------------- delegated clicks (a single listener) */
+
+        const selectNodes = $$('.customSelect');         const closeAllSelects = (except) => {             selectNodes.forEach((select) => {                 if (select !== except) select.classList.remove('open');             });         };          on(document, 'click', (event) => {             const target = event.target;              const planBtn = target.closest('.selectPlanBtn');             if (planBtn) {                 const service = planBtn.dataset.service;                 $$('input[name="serviceType"]').forEach((checkbox) => {
+                    checkbox.checked = checkbox.value === service;
+                });
+                closeAllSelects();
+                const contactSection = document.getElementById('contactSection');
+                if (contactSection) contactSection.scrollIntoView({ behavior: scrollBehavior() });
+                return;
             }
-        }
 
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const lineColor = isDark ? '255, 255, 255' : '0, 0, 0';
-
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-
-                for (let j = i + 1; j < particlesArray.length; j++) {
-                    const dx = particlesArray[i].x - particlesArray[j].x;
-                    const dy = particlesArray[i].y - particlesArray[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 100 && distance > 15) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(${lineColor}, ${(1 - distance / 100) * 0.225})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-                        ctx.stroke();
-                        ctx.closePath();
-                    }
-                }
+            const trigger = target.closest('.customSelectTrigger');
+            if (trigger) {
+                const select = trigger.closest('.customSelect');
+                closeAllSelects(select);
+                if (select) select.classList.toggle('open');
+                return;
             }
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-    }
 
-    const tabBtns = document.querySelectorAll('.templateTabBtn');
-    const templateFrame = document.getElementById('templateFrame');
-    const previewUrlBar = document.getElementById('previewUrlBar');
-    const externalDemoBtn = document.getElementById('externalDemoBtn');
-    const customBanner = document.getElementById('customBanner');
-
-    function loadTemplate(externalUrl, isCustom = false) {
-        const mobileNotice = document.getElementById('mobileLaunchNotice');
-        const mobileExternalBtn = document.getElementById('mobileExternalBtn');
-        const activeTab = document.querySelector('.templateTabBtn.isActive');
-
-        if (isCustom) {
-            if (templateFrame) templateFrame.style.display = 'none';
-            if (mobileNotice) mobileNotice.style.display = 'none';
-            if (externalDemoBtn) externalDemoBtn.style.display = 'none';
-            if (customBanner) customBanner.classList.remove('isCardHidden');
-            if (previewUrlBar) previewUrlBar.textContent = 'https://abu.dev/templates/custom-request';
-        } else {
-            if (customBanner) customBanner.classList.add('isCardHidden');
-            if (previewUrlBar) previewUrlBar.textContent = externalUrl;
-            if (externalDemoBtn) externalDemoBtn.href = externalUrl;
-
-            if (window.innerWidth <= 1024) {
-                if (templateFrame) templateFrame.style.display = 'none';
-                if (externalDemoBtn) externalDemoBtn.style.display = 'none';
-                if (mobileNotice) mobileNotice.style.display = 'flex';
-                if (mobileExternalBtn) {
-                    mobileExternalBtn.href = externalUrl;
-                    const tabTitle = activeTab ? (activeTab.dataset.originalText || activeTab.textContent.trim()) : 'Demo';
-                    mobileExternalBtn.textContent = `Open ${tabTitle} ↗`;
-                }
-            } else {
-                if (mobileNotice) mobileNotice.style.display = 'none';
-                if (templateFrame) {
-                    templateFrame.style.display = 'block';
-                    templateFrame.src = externalUrl;
-                }
-                if (externalDemoBtn) externalDemoBtn.style.display = 'inline-block';
-            }
-        }
-    }
-
-    const defaultBtn = document.querySelector('.templateTabBtn.isActive');
-    if (defaultBtn) {
-        loadTemplate(defaultBtn.getAttribute('data-url'), defaultBtn.classList.contains('customOption'));
-    }
-
-    tabBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            tabBtns.forEach(b => b.classList.remove('isActive'));
-            btn.classList.add('isActive');
-            
-            const isCustom = btn.classList.contains('customOption');
-            const targetUrl = btn.getAttribute('data-url');
-            
-            loadTemplate(targetUrl, isCustom);
-        });
-    });
-
-    const secureContactForm = document.getElementById('secureContactForm');
-    let lastSubmitTime = 0;
-    let countdownInterval = null;
-    const rateLimitMs = 15000;
-
-    function sanitizeInput(inputString) {
-        const tempDiv = document.createElement('div');
-        tempDiv.textContent = inputString;
-        return tempDiv.innerHTML;
-    }
-
-    if (secureContactForm) {
-        secureContactForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const currentTime = Date.now();
-            const timePassed = currentTime - lastSubmitTime;
-
-            if (timePassed < rateLimitMs) {
-                if (countdownInterval) clearInterval(countdownInterval);
-
-                const updateCountdown = () => {
-                    const remainingSeconds = Math.ceil((rateLimitMs - (Date.now() - lastSubmitTime)) / 1000);
-
-                    if (remainingSeconds > 0) {
-                        showAlert(`Please wait <span class="odometerNum" key="${remainingSeconds}">${remainingSeconds}</span>s before submitting again.`, 'error');
+            const option = target.closest('.customOption');
+            if (option) {
+                const select = option.closest('.customSelect');
+                if (select) {
+                    if (select === currencySelect) {
+                        setCurrency(option.dataset.value);
                     } else {
-                        clearInterval(countdownInterval);
-                        countdownInterval = null;
-                        showAlert('You can now submit your request again.', 'info');
+                        const label = $('.customSelectTrigger span', select);
+                        if (label) {
+                            label.textContent = option.textContent.trim();
+                            label.classList.remove('placeholder');
+                        }
+                        const hiddenInput = select.nextElementSibling;
+                        if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                            hiddenInput.value = option.dataset.value;
+                        }
                     }
-                };
-
-                updateCountdown();
-                countdownInterval = setInterval(updateCountdown, 1000);
+                    select.classList.remove('open');
+                }
                 return;
             }
 
-            const checkedServices = Array.from(document.querySelectorAll('input[name="serviceType"]:checked'))
-                .map(cb => sanitizeInput(cb.value));
-
-            const rawBudget = document.getElementById('projectBudget').value;
-            const rawTimeline = document.getElementById('projectTimeline').value;
-            const rawName = document.getElementById('userName').value;
-            const rawEmail = document.getElementById('userEmail').value;
-            const rawMessage = document.getElementById('userMessage').value;
-
-            const cleanName = sanitizeInput(rawName.trim());
-            const cleanEmail = sanitizeInput(rawEmail.trim());
-            const cleanMessage = sanitizeInput(rawMessage.trim());
-
-            if (!cleanName || !cleanEmail || !cleanMessage || !rawBudget || !rawTimeline) {
-                showAlert('Please complete all required fields and dropdown selections.', 'error');
+            const tierTab = target.closest('.mobileTierTab');
+            if (tierTab) {
+                closeAllSelects();
+                const index = tierTab.dataset.mobileTier;
+                $$('.mobileTierTab').forEach((tab) => tab.classList.toggle('active', tab === tierTab));$$
+('.mobileTierCard').forEach((card) => card.classList.toggle('active', card.dataset.mobileCard === index));
                 return;
             }
 
-            lastSubmitTime = Date.now();
+            closeAllSelects();
+        });
 
-            const payloadData = {
-                name: cleanName,
-                _replyto: cleanEmail,
-                message: cleanMessage,
-                services: checkedServices.length > 0 ? checkedServices.join(', ') : 'None specified',
-                budget: sanitizeInput(rawBudget),
-                timeline: sanitizeInput(rawTimeline),
-                _subject: `New Project Inquiry from ${cleanName}`,
-                _captcha: "false"
+        /* ------------------------------------------------------------ odometers */
+
+        const CHAR_SET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%&';
+        const PER_CHAR_MS = 180;
+        const activeIntervals = new WeakMap();
+
+        const runSlotMachine = (element) => {
+            const original = element.dataset.originalText;
+            if (!original || motionQuery.matches) return;
+
+            window.clearInterval(activeIntervals.get(element));
+
+            const chars = original.split('');
+            const randomChar = () => CHAR_SET.charAt(Math.floor(Math.random() * CHAR_SET.length));
+
+            element.textContent = chars.map((char) => (char === ' ' ? char : randomChar())).join('');
+            const startedAt = Date.now();
+
+            const intervalId = window.setInterval(() => {
+                const elapsed = Date.now() - startedAt;
+                let settled = true;
+
+                for (let index = 0; index < chars.length; index++) {
+                    if (original[index] === ' ') continue;
+                    if (elapsed > (index + 1) * PER_CHAR_MS) {
+                        chars[index] = original[index];
+                    } else {
+                        chars[index] = randomChar();
+                        settled = false;
+                    }
+                }
+
+                if (!settled) {
+                    element.textContent = chars.join('');
+                    return;
+                }
+
+                window.clearInterval(intervalId);
+                activeIntervals.delete(element);
+                element.textContent = original;
+            }, 60);
+
+            activeIntervals.set(element, intervalId);
+        };
+
+        const repeatingOdometer = $$('[data-odometer-repeat]');         const hoverOdometer = $$('[data-odometer]');
+
+        [...repeatingOdometer, ...hoverOdometer].forEach((element) => {
+            element.dataset.originalText = element.textContent.trim();
+        });
+
+        if (!motionQuery.matches) {
+            const rollRepeating = () => {
+                if (!document.hidden) repeatingOdometer.forEach(runSlotMachine);
             };
 
-            const submitBtn = secureContactForm.querySelector('button[type="submit"]');
-            if (submitBtn) submitBtn.disabled = true;
+            rollRepeating();
+            window.setInterval(rollRepeating, 15000);
 
-            try {
-                const response = await fetch("https://formsubmit.co/ajax/ac43f785fc6a4c020a737090ca10cbe3", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify(payloadData)
-                });
+            hoverOdometer.forEach((element) => {
+                on(element, 'mouseenter', () => runSlotMachine(element));
+                on(element, 'focus', () => runSlotMachine(element));
+            });
+        }
 
-                if (response.ok) {
-                    showAlert('Thank you! Your project inquiry has been sent securely.', 'success');
-                    secureContactForm.reset();
-                    document.querySelectorAll('.customSelectTrigger span').forEach((span, idx) => {
-                        span.textContent = idx === 0 ? 'Select Budget Range' : 'Select Timeline';
-                        span.classList.add('placeholder');
-                    });
-                    document.getElementById('projectBudget').value = '';
-                    document.getElementById('projectTimeline').value = '';
-                } else {
-                    showAlert('Failed to dispatch enquiry. Please try again.', 'error');
+        /* --------------------------------------------- particle field (canvas) */
+
+        const canvas = document.getElementById('particleCanvas');
+
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            const POINTER_RADIUS = 180;
+            const POINTER_RADIUS_SQ = POINTER_RADIUS * POINTER_RADIUS;
+            const MIN_PULL_SQ = 25 * 25;
+            const LINK_DISTANCE = 100;
+            const LINK_DISTANCE_SQ = LINK_DISTANCE * LINK_DISTANCE;
+            const MIN_SEPARATION_SQ = 15 * 15;
+            const MAX_PARTICLES = 45;
+            const AREA_PER_PARTICLE = 28000;
+
+            let width = 0;
+            let height = 0;
+            let particles = [];
+            let frameId = null;
+            let onScreen = true;
+            let running = false;
+
+            const createParticle = () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 2 + 1,
+                vx: (Math.random() - 0.5) * 0.8,
+                vy: (Math.random() - 0.5) * 0.8
+            });
+
+            const initParticles = () => {
+                const count = Math.min(Math.floor((width * height) / AREA_PER_PARTICLE), MAX_PARTICLES);
+                particles = Array.from({ length: count }, createParticle);
+            };
+
+            const resizeCanvas = () => {
+                const ratio = Math.min(window.devicePixelRatio || 1, 2);
+                width = window.innerWidth;
+                height = window.innerHeight;
+
+                const pixelWidth = Math.floor(width * ratio);
+                const pixelHeight = Math.floor(height * ratio);
+                if (canvas.width === pixelWidth && canvas.height === pixelHeight && particles.length) return;
+
+                canvas.width = pixelWidth;
+                canvas.height = pixelHeight;
+                ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                initParticles();
+            };
+
+            const stepParticle = (particle) => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+
+                if (particle.x > width || particle.x < 0) particle.vx = -particle.vx;
+                if (particle.y > height || particle.y < 0) particle.vy = -particle.vy;
+
+                if (pointer.x === null || pointer.y === null) return;
+
+                const dx = pointer.x - particle.x;
+                const dy = pointer.y - particle.y;
+                const distanceSq = dx * dx + dy * dy;
+                if (distanceSq >= POINTER_RADIUS_SQ || distanceSq <= MIN_PULL_SQ) return;
+
+                const distance = Math.sqrt(distanceSq);
+                const force = ((POINTER_RADIUS - distance) / POINTER_RADIUS) * 0.6;
+                particle.x += (dx / distance) * force;
+                particle.y += (dy / distance) * force;
+            };
+
+            const drawScene = () => {
+                ctx.clearRect(0, 0, width, height);
+
+                const dark = isDark();
+                const rgb = dark ? '255, 255, 255' : '0, 0, 0';
+                ctx.fillStyle = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
+                ctx.lineWidth = 0.5;
+
+                for (let i = 0; i < particles.length; i++) {
+                    const particle = particles[i];
+                    stepParticle(particle);
+
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const other = particles[j];
+                        const dx = particle.x - other.x;
+                        const dy = particle.y - other.y;
+                        const distanceSq = dx * dx + dy * dy;
+                        if (distanceSq >= LINK_DISTANCE_SQ || distanceSq <= MIN_SEPARATION_SQ) continue;
+
+                        ctx.strokeStyle = `rgba(${rgb}, ${(1 - Math.sqrt(distanceSq) / LINK_DISTANCE) * 0.225})`;
+                        ctx.beginPath();
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(other.x, other.y);
+                        ctx.stroke();
+                    }
                 }
-            } catch (error) {
-                showAlert('Network error occurred. Please try again later.', 'error');
-            } finally {
-                if (submitBtn) submitBtn.disabled = false;
+            };
+
+            const animate = () => {
+                drawScene();
+                frameId = window.requestAnimationFrame(animate);
+            };
+
+            const syncAnimation = () => {
+                if (running) {
+                    if (onScreen && !document.hidden && !motionQuery.matches) return;
+                    window.cancelAnimationFrame(frameId);
+                    frameId = null;
+                    running = false;
+                    return;
+                }
+
+                if (onScreen && !document.hidden && !motionQuery.matches) {
+                    running = true;
+                    frameId = window.requestAnimationFrame(animate);
+                }
+            };
+
+            resizeCanvas();
+
+            let resizeFrame = null;
+            on(window, 'resize', () => {
+                if (resizeFrame !== null) return;
+                resizeFrame = window.requestAnimationFrame(() => {
+                    resizeFrame = null;
+                    resizeCanvas();
+                });
+            });
+
+            if ('IntersectionObserver' in window) {
+                new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => { onScreen = entry.isIntersecting; });
+                    syncAnimation();
+                }).observe(canvas);
             }
-        });
-    }
 
-    function showAlert(message, type) {
-        const alertBox = document.getElementById('formAlertBox');
-        if (!alertBox) return;
+            on(document, 'visibilitychange', syncAnimation);
 
-        alertBox.className = `alertMsg alert-${type}`;
-        alertBox.innerHTML = message;
-        alertBox.classList.remove('isCardHidden');
-    }
-});
+            if (motionQuery.matches) {
+                drawScene();
+            } else {
+                syncAnimation();
+            }
+        }
+
+        /* ------------------------------------------------- mobile matrix toggle */
+
+        const matrixToggleBtn = document.getElementById('mobileMatrixToggleBtn');
+        const matrixWrapper = $('.matrixScrollWrapper');         if (matrixToggleBtn) {             on(matrixToggleBtn, 'click', (event) => {                 event.preventDefault();                 if (!matrixWrapper) return;                  const isOpen = matrixWrapper.classList.toggle('showMobileMatrix');                 matrixToggleBtn.innerHTML = isOpen                     ? '<span class="toggleIcon">✕</span> Hide Comparison Matrix'                     : '<span class="toggleIcon">⊞</span> View Full Comparison Matrix';                  if (isOpen) matrixWrapper.scrollIntoView({ behavior: scrollBehavior() });             });         }          /* ------------------------------------------------------ template viewer */          const templateFrame = document.getElementById('templateFrame');         const previewUrlBar = document.getElementById('previewUrlBar');         const externalDemoBtn = document.getElementById('externalDemoBtn');         const customBanner = document.getElementById('customBanner');         const mobileNotice = document.getElementById('mobileLaunchNotice');         const mobileExternalBtn = document.getElementById('mobileExternalBtn');         const tabButtons = $$('.templateTabBtn');
+        const MOBILE_MAX_WIDTH = 1024;
+        const CUSTOM_REQUEST_URL = 'https://abu.dev/templates/custom-request';
+
+        const setDisplay = (element, visible, display = 'block') => {
+            if (element) element.style.display = visible ? display : 'none';
+        };
+
+        const loadTemplate = (url, isCustom = false) => {
+            if (isCustom) {
+                setDisplay(templateFrame, false);
+                setDisplay(mobileNotice, false);
+                setDisplay(externalDemoBtn, false);
+                if (customBanner) customBanner.classList.remove('isCardHidden');
+                if (previewUrlBar) previewUrlBar.textContent = CUSTOM_REQUEST_URL;
+                return;
+            }
+
+            if (customBanner) customBanner.classList.add('isCardHidden');
+            if (previewUrlBar) previewUrlBar.textContent = url;
+            if (externalDemoBtn) externalDemoBtn.href = url;
+
+            if (window.innerWidth > MOBILE_MAX_WIDTH) {
+                setDisplay(mobileNotice, false);
+                setDisplay(externalDemoBtn, true, 'inline-block');
+                setDisplay(templateFrame, true);
+                if (templateFrame) templateFrame.src = url;
+                return;
+            }
+
+            setDisplay(templateFrame, false);
+            setDisplay(externalDemoBtn, false);
+            setDisplay(mobileNotice, true, 'flex');
+
+            if (mobileExternalBtn) {
+                const currentTab = $('.templateTabBtn.isActive');
+                const title = currentTab
+                    ? (currentTab.dataset.originalText || currentTab.textContent.trim())
+                    : 'Demo';
+                mobileExternalBtn.href = url;
+                mobileExternalBtn.textContent = `Open ${title} ↗`;
+            }
+        };
+
+        tabButtons.forEach((btn) => on(btn, 'click', () => {
+            tabButtons.forEach((other) => other.classList.toggle('isActive', other === btn));
+            loadTemplate(btn.dataset.url, btn.classList.contains('customOption'));
+        }));
+
+        const initialTab = $('.templateTabBtn.isActive');
+        if (initialTab) loadTemplate(initialTab.dataset.url, initialTab.classList.contains('customOption'));
+
+        /* ----------------------------------------------------------- contact form */
+
+        const secureContactForm = document.getElementById('secureContactForm');
+        let lastSubmitTime = 0;
+        let countdownInterval = null;
+        const rateLimitMs = 15000;
+
+        if (secureContactForm) {
+            secureContactForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const currentTime = Date.now();
+                const timePassed = currentTime - lastSubmitTime;
+
+                if (timePassed < rateLimitMs) {
+                    if (countdownInterval) clearInterval(countdownInterval);
+
+                    const updateCountdown = () => {
+                        const remainingSeconds = Math.ceil((rateLimitMs - (Date.now() - lastSubmitTime)) / 1000);
+
+                        if (remainingSeconds > 0) {
+                            const node = document.createElement('span');
+                            node.append('Please wait ', remainingSeconds, 's before submitting again.');
+                            showAlert(node, 'error');
+                        } else {
+                            clearInterval(countdownInterval);
+                            countdownInterval = null;
+                            showAlert('You can now submit your request again.', 'info');
+                        }
+                    };
+
+                    updateCountdown();
+                    countdownInterval = setInterval(updateCountdown, 1000);
+                    return;
+                }
+
+                const checkedServices = Array.from(document.querySelectorAll('input[name="serviceType"]:checked'))
+                    .map(cb => cb.value.trim());
+
+                const rawBudget = document.getElementById('projectBudget').value.trim();
+                const rawTimeline = document.getElementById('projectTimeline').value.trim();
+                const rawName = document.getElementById('userName').value.trim();
+                const rawEmail = document.getElementById('userEmail').value.trim();
+                const rawMessage = document.getElementById('userMessage').value.trim();
+
+                if (!rawName || !rawEmail || !rawMessage || !rawBudget || !rawTimeline) {
+                    showAlert('Please complete all required fields and dropdown selections.', 'error');
+                    return;
+                }
+
+                lastSubmitTime = Date.now();
+
+                const payloadData = {
+                    name: rawName,
+                    _replyto: rawEmail,
+                    message: rawMessage,
+                    services: checkedServices.length > 0 ? checkedServices.join(', ') : 'None specified',
+                    budget: rawBudget,
+                    timeline: rawTimeline,
+                    _subject: `New Project Inquiry from ${rawName}`,
+                    _captcha: "false"
+                };
+
+                const submitBtn = secureContactForm.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch("https://formsubmit.co/ajax/ac43f785fc6a4c020a737090ca10cbe3", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify(payloadData)
+                    });
+
+                    if (response.ok) {
+                        showAlert('Thank you! Your project inquiry has been sent securely.', 'success');
+                        secureContactForm.reset();
+                        document.querySelectorAll('.customSelectTrigger span').forEach((span, idx) => {
+                            span.textContent = idx === 0 ? 'Select Budget Range' : 'Select Timeline';
+                            span.classList.add('placeholder');
+                        });
+                        document.getElementById('projectBudget').value = '';
+                        document.getElementById('projectTimeline').value = '';
+                    } else {
+                        showAlert('Failed to dispatch enquiry. Please try again.', 'error');
+                    }
+                } catch (error) {
+                    showAlert('Network error occurred. Please try again later.', 'error');
+                } finally {
+                    if (submitBtn) submitBtn.disabled = false;
+                }
+            });
+        }
+    });
+})();
