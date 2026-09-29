@@ -1,10 +1,6 @@
-/* ============================================================================
- * [ABU.DEV] — front-end behaviour
- * ========================================================================== */
 (() => {
     'use strict';
 
-    /* ------------------------------------------------------------------ dynamic data */
     const PRICING_DATA = {
         tiers: [
             {
@@ -113,8 +109,6 @@
         ]
     };
 
-    /* ------------------------------------------------------------------ utils */
-
     const $ = (selector, scope = document) => scope.querySelector(selector);
     const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
@@ -138,14 +132,11 @@
 
         const pointer = { x: null, y: null };
 
-        /* ------------------------------------------------------------- dynamic pricing rendering */
-
         const renderPricingSystem = () => {
             const mobileCardsContainer = $('.mobileTierCards');
             const matrixTableContainer = $('.pricingMatrixTable');
             if (!mobileCardsContainer || !matrixTableContainer) return;
 
-            // Render Mobile Cards
             mobileCardsContainer.innerHTML = PRICING_DATA.tiers.map((tier, idx) => `
                 <div class="mobileTierCard ${idx === 1 ? 'active' : ''}" data-mobile-card="${idx}">
                     <div class="mobileCardHeader">
@@ -172,7 +163,6 @@
                 </div>
             `).join('');
 
-            // Render Matrix Header
             let matrixHTML = `
                 <div class="matrixRow matrixHeaderRow">
                     <div class="matrixCol featureInfoCol">
@@ -188,7 +178,6 @@
                 </div>
             `;
 
-            // Render Feature Rows
             PRICING_DATA.features.forEach(feature => {
                 matrixHTML += `
                     <div class="matrixRow">
@@ -205,7 +194,6 @@
                 `;
             });
 
-            // Render Matrix Footer
             matrixHTML += `
                 <div class="matrixRow matrixFooterRow">
                     <div class="matrixCol featureInfoCol receiptInfoCol">
@@ -237,7 +225,6 @@
 
         renderPricingSystem();
 
-        /* ------------------------------------------------------------- alerts */
 
         const alertBox = document.getElementById('formAlertBox');
 
@@ -263,7 +250,6 @@
             btn.addEventListener('mouseleave', updateOrigin);
         });
 
-        /* ----------------------------------------------------- inverted cursor */
 
         const cursor = document.getElementById('invertedCursor');
         const cursorLabels = $$('.cursorBtnText');
@@ -351,13 +337,11 @@
         on(document.getElementById('iframeWrapper'), 'mouseenter', () => setCursorVisible(false));
         on(document.getElementById('iframeWrapper'), 'mouseleave', () => setCursorVisible(true));
 
-        /* --------------------------------------------------------- back to top */
 
         on(document.getElementById('backToTopBtn'), 'click', () => {
             window.scrollTo({ top: 0, behavior: scrollBehavior() });
         });
 
-        /* --------------------------------------------------------- theme toggle */
 
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const themeIcon = themeToggleBtn ? $('.themeIcon', themeToggleBtn) : null;
@@ -383,7 +367,6 @@
             });
         }
 
-        /* ------------------------------------------------------------ mobile nav */
 
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const heroNav = document.getElementById('heroNav');
@@ -405,7 +388,6 @@
             if (event.key === 'Escape') closeMobileMenu();
         });
 
-        /* ------------------------------------------------------- currency logic */
 
         const currencySelect = document.getElementById('currencySelect');
         const budgetSelect = document.getElementById('budgetSelect');
@@ -459,9 +441,20 @@
 
         setCurrency(store.get('selectedCurrency'));
 
-        /* ------------------------------- delegated clicks (a single listener) */
+        const selectNodes = $$('.customSelect');
+        const closeAllSelects = (except) => {
+            selectNodes.forEach((select) => {
+                if (select !== except) select.classList.remove('open');
+            });
+        };
+        
+        on(document, 'click', (event) => {
+            const target = event.target;
+            const planBtn = target.closest('.selectPlanBtn');
+            if (planBtn) {
+                const service = planBtn.dataset.service;
+                $$('input[name="serviceType"]').forEach((checkbox) => {
 
-        const selectNodes = $$('.customSelect');         const closeAllSelects = (except) => {             selectNodes.forEach((select) => {                 if (select !== except) select.classList.remove('open');             });         };          on(document, 'click', (event) => {             const target = event.target;              const planBtn = target.closest('.selectPlanBtn');             if (planBtn) {                 const service = planBtn.dataset.service;                 $$('input[name="serviceType"]').forEach((checkbox) => {
                     checkbox.checked = checkbox.value === service;
                 });
                 closeAllSelects();
@@ -511,8 +504,6 @@
 
             closeAllSelects();
         });
-
-        /* ------------------------------------------------------------ odometers */
 
         const CHAR_SET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%&';
         const PER_CHAR_MS = 180;
@@ -576,8 +567,6 @@
                 on(element, 'focus', () => runSlotMachine(element));
             });
         }
-
-        /* --------------------------------------------- particle field (canvas) */
 
         const canvas = document.getElementById('particleCanvas');
 
@@ -726,10 +715,25 @@
             }
         }
 
-        /* ------------------------------------------------- mobile matrix toggle */
-
         const matrixToggleBtn = document.getElementById('mobileMatrixToggleBtn');
-        const matrixWrapper = $('.matrixScrollWrapper');         if (matrixToggleBtn) {             on(matrixToggleBtn, 'click', (event) => {                 event.preventDefault();                 if (!matrixWrapper) return;                  const isOpen = matrixWrapper.classList.toggle('showMobileMatrix');                 matrixToggleBtn.innerHTML = isOpen                     ? '<span class="toggleIcon">✕</span> Hide Comparison Matrix'                     : '<span class="toggleIcon">⊞</span> View Full Comparison Matrix';                  if (isOpen) matrixWrapper.scrollIntoView({ behavior: scrollBehavior() });             });         }          /* ------------------------------------------------------ template viewer */          const templateFrame = document.getElementById('templateFrame');         const previewUrlBar = document.getElementById('previewUrlBar');         const externalDemoBtn = document.getElementById('externalDemoBtn');         const customBanner = document.getElementById('customBanner');         const mobileNotice = document.getElementById('mobileLaunchNotice');         const mobileExternalBtn = document.getElementById('mobileExternalBtn');         const tabButtons = $$('.templateTabBtn');
+        const matrixWrapper = $('.matrixScrollWrapper');
+        if (matrixToggleBtn) {
+            on(matrixToggleBtn, 'click', (event) => {
+                event.preventDefault();
+                if (!matrixWrapper) return;
+
+                const isOpen = matrixWrapper.classList.toggle('showMobileMatrix');
+                matrixToggleBtn.innerHTML = isOpen ? '<span class="toggleIcon">✕</span> Hide Comparison Matrix' : '<span class="toggleIcon">⊞</span> View Full Comparison Matrix';
+                if (isOpen) matrixWrapper.scrollIntoView({ behavior: scrollBehavior() });
+            });
+        }                   
+        const templateFrame = document.getElementById('templateFrame');
+        const previewUrlBar = document.getElementById('previewUrlBar');
+        const externalDemoBtn = document.getElementById('externalDemoBtn');
+        const customBanner = document.getElementById('customBanner');
+        const mobileNotice = document.getElementById('mobileLaunchNotice');
+        const mobileExternalBtn = document.getElementById('mobileExternalBtn');
+        const tabButtons = $$('.templateTabBtn');
         const MOBILE_MAX_WIDTH = 1024;
         const CUSTOM_REQUEST_URL = 'https://abu.dev/templates/custom-request';
 
@@ -780,8 +784,6 @@
 
         const initialTab = $('.templateTabBtn.isActive');
         if (initialTab) loadTemplate(initialTab.dataset.url, initialTab.classList.contains('customOption'));
-
-        /* ----------------------------------------------------------- contact form */
 
         const secureContactForm = document.getElementById('secureContactForm');
         let lastSubmitTime = 0;
