@@ -11,7 +11,7 @@
                 checkClass: 'checkOrange',
                 sub: 'Fast & affordable pre-built turnkey launch',
                 priceLabel: 'STARTING AT',
-                prices: { inr: '₹4,999', eur: '€50', usd: '$55' }
+                prices: { inr: '₹3,999', eur: '€50', usd: '$55' }
             },
             {
                 id: 'Hybrid Build',
@@ -22,7 +22,7 @@
                 sub: 'The ideal sweet spot for growing brands',
                 popular: true,
                 priceLabel: 'STARTING AT',
-                prices: { inr: '₹9,999', eur: '€150', usd: '$175' }
+                prices: { inr: '₹7,999', eur: '€120', usd: '$125' }
             },
             {
                 id: 'Full Custom Site',
@@ -52,7 +52,7 @@
                 checkClass: 'checkGreen',
                 sub: 'Comprehensive diagnostic, speed & security audit',
                 priceLabel: 'FLAT FEE',
-                prices: { inr: '₹4,999', eur: '€50', usd: '$50' }
+                prices: { inr: '₹2,499', eur: '€25', usd: '$25' }
             }
         ],
         features: [
@@ -447,7 +447,7 @@
                 if (select !== except) select.classList.remove('open');
             });
         };
-        
+
         on(document, 'click', (event) => {
             const target = event.target;
             const planBtn = target.closest('.selectPlanBtn');
