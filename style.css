@@ -101,6 +101,17 @@ a:active {
     pointer-events: none;
 }
 
+.scrollReveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+}
+.scrollReveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 main {
     position: relative;
     z-index: 1;
@@ -109,6 +120,7 @@ main {
 }
 
 .embeddedHeader {
+    position: sticky;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -117,6 +129,20 @@ main {
     gap: 10px;
     position: relative;
     z-index: 100;
+    animation: navSlideDown auto linear;
+    animation-timeline: scroll(root block);
+    animation-range: 0px 150px;
+}
+
+@keyframes navSlideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .siteLogo {

@@ -132,6 +132,25 @@
 
         const pointer = { x: null, y: null };
 
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const revealOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
+
+        const elementsToReveal = document.querySelectorAll('.scrollReveal');
+        elementsToReveal.forEach((element) => revealOnScroll.observe(element));
+
         const renderPricingSystem = () => {
             const mobileCardsContainer = $('.mobileTierCards');
             const matrixTableContainer = $('.pricingMatrixTable');
